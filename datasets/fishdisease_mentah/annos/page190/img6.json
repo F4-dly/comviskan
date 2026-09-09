@@ -1,0 +1,15 @@
+{
+  "image": "page190\\img6.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "근육 출혈(Muscular hemorrhage)",
+      "bbox": [
+        726,
+        737,
+        1389,
+        914
+      ]
+    }
+  ]
+}

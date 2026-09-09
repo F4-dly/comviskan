@@ -1,0 +1,15 @@
+{
+  "image": "page13\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "눈 출혈 / 돌출(Ocular hemorrhage / Exophthalmos)",
+      "bbox": [
+        333,
+        679,
+        411,
+        747
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "image": "page193\\img6.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        649,
+        685,
+        752,
+        764
+      ]
+    },
+    {
+      "class": "탈장/탈출(Prolapse)",
+      "subtype": "직장 탈출 및 복수(Rectal prolapse, ascites)",
+      "bbox": [
+        1228,
+        590,
+        1456,
+        797
+      ]
+    }
+  ]
+}

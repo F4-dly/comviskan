@@ -1,0 +1,55 @@
+{
+  "image": "page105\\img3.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        754,
+        1195,
+        867,
+        1360
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "눈 출혈 / 돌출(Ocular hemorrhage / Exophthalmos)",
+      "bbox": [
+        811,
+        145,
+        868,
+        203
+      ]
+    },
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        816,
+        149,
+        876,
+        206
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        646,
+        1144,
+        694,
+        1204
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "지느러미 궤양(Fin ulceration)",
+      "bbox": [
+        753,
+        1201,
+        865,
+        1366
+      ]
+    }
+  ]
+}

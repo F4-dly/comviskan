@@ -1,0 +1,45 @@
+{
+  "image": "page127\\img6.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "아가미뚜껑 출혈(Opercular hemorrhage)",
+      "bbox": [
+        235,
+        880,
+        684,
+        1369
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "근육 출혈(Muscular hemorrhage)",
+      "bbox": [
+        732,
+        8,
+        936,
+        998
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        369,
+        649,
+        471,
+        871
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "근육 출혈(Muscular hemorrhage)",
+      "bbox": [
+        132,
+        4,
+        382,
+        835
+      ]
+    }
+  ]
+}

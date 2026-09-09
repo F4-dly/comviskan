@@ -1,0 +1,25 @@
+{
+  "image": "page256\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        892,
+        971,
+        1113,
+        1459
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "지느러미 궤양(Fin ulceration)",
+      "bbox": [
+        609,
+        1036,
+        816,
+        1450
+      ]
+    }
+  ]
+}

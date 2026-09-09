@@ -1,0 +1,15 @@
+{
+  "image": "page71\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        480,
+        1355.01,
+        630,
+        1442.01
+      ]
+    }
+  ]
+}

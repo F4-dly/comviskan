@@ -1,0 +1,35 @@
+{
+  "image": "page255\\img2.jpeg",
+  "annotations": [
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        718,
+        347,
+        1242,
+        1600
+      ]
+    },
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        883,
+        164,
+        1077,
+        323
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        852,
+        1573.01,
+        1002,
+        1667.01
+      ]
+    }
+  ]
+}

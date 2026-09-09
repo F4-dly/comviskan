@@ -1,0 +1,25 @@
+{
+  "image": "page206\\img2.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        420,
+        946,
+        490,
+        1103
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "아가미뚜껑 출혈(Opercular hemorrhage)",
+      "bbox": [
+        345,
+        119,
+        411,
+        175
+      ]
+    }
+  ]
+}

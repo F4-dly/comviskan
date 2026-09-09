@@ -1,0 +1,35 @@
+{
+  "image": "page123\\img10.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        553,
+        109,
+        699,
+        227
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "근육 출혈(Muscular hemorrhage)",
+      "bbox": [
+        745,
+        160,
+        1056,
+        230
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "지느러미 궤양(Fin ulceration)",
+      "bbox": [
+        196,
+        443,
+        313,
+        478
+      ]
+    }
+  ]
+}

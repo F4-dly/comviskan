@@ -1,0 +1,25 @@
+{
+  "image": "page255\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        807,
+        1838.01,
+        1005,
+        2006.01
+      ]
+    },
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        622,
+        289,
+        1159,
+        1705.01
+      ]
+    }
+  ]
+}

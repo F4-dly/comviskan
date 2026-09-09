@@ -1,0 +1,15 @@
+{
+  "image": "page197\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "아가미뚜껑 출혈(Opercular hemorrhage)",
+      "bbox": [
+        91,
+        776,
+        205,
+        848
+      ]
+    }
+  ]
+}

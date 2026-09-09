@@ -1,0 +1,8 @@
+# Lokasi dataset Fish4Knowledge (pastikan path ini benar di komputer Anda)
+path: D:/yolocomvis/datasets/fish4knowledge
+train: images/train  # Folder gambar untuk belajar
+val: images/val      # Folder gambar untuk ujian (validasi)
+
+# Kita hanya punya 1 target deteksi
+names:
+  0: fish

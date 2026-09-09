@@ -1,0 +1,25 @@
+{
+  "image": "page216\\img16.jpeg",
+  "annotations": [
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        679,
+        677,
+        1009,
+        800
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "피부 출혈(Skin hemorrhage)",
+      "bbox": [
+        684,
+        668,
+        1015,
+        800
+      ]
+    }
+  ]
+}

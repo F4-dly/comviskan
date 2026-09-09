@@ -1,0 +1,35 @@
+{
+  "image": "page221\\img7.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        157,
+        625,
+        261,
+        718
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "근육 출혈(Muscular hemorrhage)",
+      "bbox": [
+        624,
+        655,
+        1189,
+        736
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "피부 출혈(Skin hemorrhage)",
+      "bbox": [
+        1570.01,
+        572,
+        1611.01,
+        616
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "image": "page78\\img2.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "아가미뚜껑 출혈(Opercular hemorrhage)",
+      "bbox": [
+        723,
+        265,
+        901,
+        418
+      ]
+    },
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "입 림포시스티스(Mouth lymphocystis)",
+      "bbox": [
+        723,
+        265,
+        912,
+        413
+      ]
+    }
+  ]
+}

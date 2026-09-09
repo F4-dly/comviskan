@@ -1,0 +1,25 @@
+{
+  "image": "page176\\img3.jpeg",
+  "annotations": [
+    {
+      "class": "탈장/탈출(Prolapse)",
+      "subtype": "직장 탈출 및 복수(Rectal prolapse, ascites)",
+      "bbox": [
+        705,
+        934,
+        873,
+        1109
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        523,
+        811,
+        579,
+        862
+      ]
+    }
+  ]
+}

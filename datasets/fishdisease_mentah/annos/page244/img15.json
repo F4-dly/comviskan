@@ -1,0 +1,35 @@
+{
+  "image": "page244\\img15.jpeg",
+  "annotations": [
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        1189,
+        242,
+        1684,
+        434
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        1753.01,
+        364,
+        1879.01,
+        458
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "아가미뚜껑 출혈(Opercular hemorrhage)",
+      "bbox": [
+        349,
+        262,
+        733,
+        505
+      ]
+    }
+  ]
+}

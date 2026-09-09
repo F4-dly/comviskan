@@ -1,0 +1,35 @@
+{
+  "image": "page29\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        1030,
+        598,
+        1135,
+        695
+      ]
+    },
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        1405.01,
+        601,
+        1542.01,
+        713
+      ]
+    },
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        1749.01,
+        670,
+        2001.01,
+        790
+      ]
+    }
+  ]
+}

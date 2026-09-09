@@ -1,0 +1,35 @@
+{
+  "image": "page220\\img23.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        1540.01,
+        583,
+        1683.01,
+        653
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        823,
+        554,
+        1074,
+        706
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        952,
+        694,
+        1260,
+        763
+      ]
+    }
+  ]
+}

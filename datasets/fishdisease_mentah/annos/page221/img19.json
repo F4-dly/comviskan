@@ -1,0 +1,45 @@
+{
+  "image": "page221\\img19.jpeg",
+  "annotations": [
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        1242,
+        442,
+        1338,
+        595
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        1488.01,
+        349,
+        1624.01,
+        473
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        1704.01,
+        343,
+        1789.01,
+        464
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "피부 출혈(Skin hemorrhage)",
+      "bbox": [
+        912,
+        383,
+        1074,
+        535
+      ]
+    }
+  ]
+}

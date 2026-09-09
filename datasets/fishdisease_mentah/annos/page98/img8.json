@@ -1,0 +1,25 @@
+{
+  "image": "page98\\img8.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "피부 출혈(Skin hemorrhage)",
+      "bbox": [
+        1374.01,
+        790,
+        1704.01,
+        994
+      ]
+    },
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        1320.01,
+        943,
+        1774.01,
+        1064
+      ]
+    }
+  ]
+}

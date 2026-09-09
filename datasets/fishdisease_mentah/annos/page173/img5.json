@@ -1,0 +1,15 @@
+{
+  "image": "page173\\img5.jpeg",
+  "annotations": [
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        823,
+        859,
+        877,
+        910
+      ]
+    }
+  ]
+}

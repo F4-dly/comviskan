@@ -1,0 +1,35 @@
+{
+  "image": "page167\\img6.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        771,
+        614.01,
+        864,
+        676.01
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        745,
+        568.01,
+        828,
+        629.01
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "지느러미 궤양(Fin ulceration)",
+      "bbox": [
+        753,
+        602.01,
+        835,
+        644.01
+      ]
+    }
+  ]
+}

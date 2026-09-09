@@ -1,0 +1,25 @@
+{
+  "image": "page134\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 혼탁(Skin opacity)",
+      "bbox": [
+        810,
+        359,
+        931,
+        497
+      ]
+    },
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        819,
+        370,
+        912,
+        487
+      ]
+    }
+  ]
+}

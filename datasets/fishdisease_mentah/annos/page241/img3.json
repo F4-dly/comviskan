@@ -1,0 +1,35 @@
+{
+  "image": "page241\\img3.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        289.01,
+        823,
+        348.01,
+        862
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        751.01,
+        625,
+        808.01,
+        736
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        300.01,
+        829,
+        340.01,
+        860
+      ]
+    }
+  ]
+}

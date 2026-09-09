@@ -1,0 +1,15 @@
+{
+  "image": "page160\\img3.jpeg",
+  "annotations": [
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "지느러미 궤양(Fin ulceration)",
+      "bbox": [
+        613,
+        682.01,
+        904,
+        754.01
+      ]
+    }
+  ]
+}

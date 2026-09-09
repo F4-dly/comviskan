@@ -1,0 +1,35 @@
+{
+  "image": "page77\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "입 림포시스티스(Mouth lymphocystis)",
+      "bbox": [
+        1797.01,
+        733,
+        1905.01,
+        926
+      ]
+    },
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 림포시스티스(Skin lymphocystis)",
+      "bbox": [
+        1723.01,
+        820,
+        1776.01,
+        895
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "피부 출혈(Skin hemorrhage)",
+      "bbox": [
+        1242,
+        854,
+        1416,
+        979
+      ]
+    }
+  ]
+}

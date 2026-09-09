@@ -1,0 +1,15 @@
+{
+  "image": "page99\\img12.jpeg",
+  "annotations": [
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        1966.01,
+        722,
+        2044.01,
+        823
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "image": "page198\\img2.jpeg",
+  "annotations": [
+    {
+      "class": "궤양(Ulceration)",
+      "subtype": "피부 궤양(Skin ulceration)",
+      "bbox": [
+        823,
+        590,
+        939,
+        673
+      ]
+    },
+    {
+      "class": "침식(Erosion)",
+      "subtype": "지느러미 침식(Fin erosion)",
+      "bbox": [
+        1000,
+        503,
+        1183,
+        577
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "지느러미 출혈(Fin hemorrhage)",
+      "bbox": [
+        1018,
+        527,
+        1162,
+        569
+      ]
+    }
+  ]
+}

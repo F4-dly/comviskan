@@ -1,0 +1,15 @@
+{
+  "image": "page54\\img2.jpeg",
+  "annotations": [
+    {
+      "class": "탈장/탈출(Prolapse)",
+      "subtype": "직장 탈출 및 복수(Rectal prolapse, ascites)",
+      "bbox": [
+        661,
+        863,
+        832,
+        974
+      ]
+    }
+  ]
+}

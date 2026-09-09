@@ -1,0 +1,15 @@
+{
+  "image": "page182\\img5.jpeg",
+  "annotations": [
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "피부 출혈(Skin hemorrhage)",
+      "bbox": [
+        1369.01,
+        784,
+        1407.01,
+        818
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "image": "page80\\img1.jpeg",
+  "annotations": [
+    {
+      "class": "기생충(Parasites)",
+      "subtype": "피부 림포시스티스(Skin lymphocystis)",
+      "bbox": [
+        1201,
+        719,
+        1309,
+        808
+      ]
+    }
+  ]
+}

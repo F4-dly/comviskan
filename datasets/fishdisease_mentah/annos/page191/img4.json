@@ -1,0 +1,25 @@
+{
+  "image": "page191\\img4.jpeg",
+  "annotations": [
+    {
+      "class": "탈장/탈출(Prolapse)",
+      "subtype": "직장 탈출 및 복수(Rectal prolapse, ascites)",
+      "bbox": [
+        1471.01,
+        679,
+        1818.01,
+        890
+      ]
+    },
+    {
+      "class": "출혈(Hemorrhage)",
+      "subtype": "근육 출혈(Muscular hemorrhage)",
+      "bbox": [
+        799,
+        787,
+        1440,
+        877
+      ]
+    }
+  ]
+}
