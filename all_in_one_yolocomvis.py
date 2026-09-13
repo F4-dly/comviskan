@@ -478,6 +478,21 @@ def run_dashboard(root: Path, image_path: Path, output_path: Path | None = None)
     return destination
 
 
+def export_to_drive(source_dir: Path, drive_dir: Path) -> Path:
+    """Copy reports, checkpoints, and dashboards to a mounted Google Drive folder."""
+    source_dir = Path(source_dir)
+    drive_dir = Path(drive_dir)
+    if not source_dir.exists():
+        raise FileNotFoundError(f"Folder sumber tidak ditemukan: {source_dir}")
+    drive_dir.mkdir(parents=True, exist_ok=True)
+    destination = drive_dir / source_dir.name
+    if destination.exists():
+        shutil.rmtree(destination)
+    shutil.copytree(source_dir, destination)
+    print(f"Artefak disalin ke Google Drive: {destination}")
+    return destination
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent)
