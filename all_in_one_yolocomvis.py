@@ -75,7 +75,7 @@ def save_dataset_report(root: Path) -> Path:
 
 
 def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> None:
-    """Convert masks to YOLO labels and move a deterministic validation split."""
+    """Convert masks, collect matching images, and create a validation split."""
     dataset = root / "datasets" / "fish4knowledge"
     mask_dir = dataset / "maskikan"
     train_images = dataset / "images" / "train"
@@ -87,6 +87,16 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
         directory.mkdir(parents=True, exist_ok=True)
 
     converted = 0
+    copied_images = 0
+    missing_images = 0
+    image_index = {
+        image_path.name: image_path
+        for image_path in dataset.rglob("*")
+        if image_path.is_file()
+        and image_path.suffix.lower() in IMAGE_EXTENSIONS
+        and "maskikan" not in image_path.parts
+        and image_path.parent not in (train_images, val_images)
+    }
     for mask_path in sorted(mask_dir.glob("*.png")):
         mask = cv2.imread(str(mask_path), cv2.IMREAD_GRAYSCALE)
         if mask is None:
@@ -99,6 +109,20 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
         x, y, box_width, box_height = cv2.boundingRect(max(contours, key=cv2.contourArea))
         label_name = mask_path.name.replace("mask_", "fish_").replace(".png", ".txt")
         label_path = train_labels / label_name
+        image_name = Path(label_name).with_suffix(".png").name
+        image_path = image_index.get(image_name)
+        if image_path is None:
+            image_path = next(
+                (candidate for name, candidate in image_index.items() if Path(name).stem == Path(image_name).stem),
+                None,
+            )
+        if image_path is None:
+            missing_images += 1
+            continue
+        target_image = train_images / image_path.name
+        if not target_image.exists():
+            shutil.copy2(image_path, target_image)
+            copied_images += 1
         label_path.write_text(
             f"0 {(x + box_width / 2) / width:.6f} "
             f"{(y + box_height / 2) / height:.6f} "
@@ -122,7 +146,10 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
             shutil.move(str(image_path), str(val_images / image_path.name))
         moved += 1
 
-    print(f"Fish4Knowledge: {converted} label dibuat, {moved} file dipindahkan ke val.")
+    print(
+        f"Fish4Knowledge: {converted} pasangan diproses, {copied_images} gambar disalin, "
+        f"{missing_images} gambar tidak ditemukan, {moved} pasangan dipindahkan ke val."
+    )
 
 
 def prepare_lesion_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> None:
