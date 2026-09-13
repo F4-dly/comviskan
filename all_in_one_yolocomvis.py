@@ -84,11 +84,14 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
     val_labels = dataset / "labels" / "val"
 
     for directory in (train_images, train_labels, val_images, val_labels):
+        if directory.exists():
+            shutil.rmtree(directory)
         directory.mkdir(parents=True, exist_ok=True)
 
     converted = 0
     copied_images = 0
     missing_images = 0
+    pairs = []
     image_index = {}
     for image_path in dataset.rglob("*"):
         if (
@@ -128,7 +131,7 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
         if image_path is None:
             missing_images += 1
             continue
-        target_image = train_images / image_path.name
+        target_image = train_images / f"{label_path.stem}{image_path.suffix.lower()}"
         if not target_image.exists():
             shutil.copy2(image_path, target_image)
             copied_images += 1
@@ -139,20 +142,15 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
             encoding="utf-8",
         )
         converted += 1
+        pairs.append((label_path, target_image))
 
-    labels = sorted(train_labels.glob("*.txt"))
-    random.Random(seed).shuffle(labels)
-    validation_count = int(len(labels) * val_ratio)
+    random.Random(seed).shuffle(pairs)
+    validation_count = int(len(pairs) * val_ratio)
     moved = 0
-    for label_path in labels[:validation_count]:
-        image_stem = label_path.stem
-        candidates = [train_images / f"{image_stem}{extension}" for extension in IMAGE_EXTENSIONS]
-        image_path = next((path for path in candidates if path.exists()), None)
+    for label_path, image_path in pairs[:validation_count]:
         target_label = val_labels / label_path.name
-        if not target_label.exists():
-            shutil.move(str(label_path), str(target_label))
-        if image_path is not None and not (val_images / image_path.name).exists():
-            shutil.move(str(image_path), str(val_images / image_path.name))
+        shutil.move(str(label_path), str(target_label))
+        shutil.move(str(image_path), str(val_images / image_path.name))
         moved += 1
 
     print(
