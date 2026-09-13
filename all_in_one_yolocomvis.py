@@ -89,15 +89,23 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
     converted = 0
     copied_images = 0
     missing_images = 0
-    image_index = {
-        image_path.name: image_path
-        for image_path in dataset.rglob("*")
-        if image_path.is_file()
-        and image_path.suffix.lower() in IMAGE_EXTENSIONS
-        and "maskikan" not in image_path.parts
-        and image_path.parent not in (train_images, val_images)
-    }
-    for mask_path in sorted(mask_dir.glob("*.png")):
+    image_index = {}
+    for image_path in dataset.rglob("*"):
+        if (
+            image_path.is_file()
+            and image_path.suffix.lower() in IMAGE_EXTENSIONS
+            and "maskikan" not in image_path.parts
+            and image_path.parent not in (train_images, val_images)
+        ):
+            image_index.setdefault(image_path.stem.lower(), image_path)
+
+    mask_paths = sorted(mask_dir.rglob("*.png")) if mask_dir.exists() else []
+    if not mask_paths:
+        mask_paths = sorted(
+            path for path in dataset.rglob("*.png")
+            if path.is_file() and path.stem.lower().startswith("mask_")
+        )
+    for mask_path in mask_paths:
         mask = cv2.imread(str(mask_path), cv2.IMREAD_GRAYSCALE)
         if mask is None:
             continue
@@ -109,13 +117,14 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
         x, y, box_width, box_height = cv2.boundingRect(max(contours, key=cv2.contourArea))
         label_name = mask_path.name.replace("mask_", "fish_").replace(".png", ".txt")
         label_path = train_labels / label_name
-        image_name = Path(label_name).with_suffix(".png").name
-        image_path = image_index.get(image_name)
-        if image_path is None:
-            image_path = next(
-                (candidate for name, candidate in image_index.items() if Path(name).stem == Path(image_name).stem),
-                None,
-            )
+        mask_stem = mask_path.stem.lower()
+        image_stems = [
+            mask_stem,
+            mask_stem.removeprefix("mask_"),
+            mask_stem.removeprefix("mask_").removeprefix("fish_"),
+            f"fish_{mask_stem.removeprefix('mask_')}",
+        ]
+        image_path = next((image_index.get(stem) for stem in image_stems if image_index.get(stem)), None)
         if image_path is None:
             missing_images += 1
             continue
@@ -150,6 +159,11 @@ def prepare_fish_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> 
         f"Fish4Knowledge: {converted} pasangan diproses, {copied_images} gambar disalin, "
         f"{missing_images} gambar tidak ditemukan, {moved} pasangan dipindahkan ke val."
     )
+    if converted == 0:
+        raise RuntimeError(
+            "Fish4Knowledge tidak menghasilkan pasangan gambar-label. "
+            "Periksa struktur arsip dan pola nama mask/gambar sebelum training."
+        )
 
 
 def prepare_lesion_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -> None:
