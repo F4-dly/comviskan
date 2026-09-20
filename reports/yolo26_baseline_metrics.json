@@ -1,0 +1,27 @@
+{
+  "fish_detection": {
+    "status": "zero-shot-pretrained-full-validation",
+    "model": "yolo26n.pt",
+    "fraction": 1.0,
+    "precision": 0.19710638267248393,
+    "recall": 0.35510541546093427,
+    "map50": 0.15306798763355733,
+    "map50_95": 0.1024339558482833
+  },
+  "lesion_detection": {
+    "status": "zero-shot-pretrained-full-validation",
+    "model": "yolo26n.pt",
+    "fraction": 1.0,
+    "precision": 0.057356608478802994,
+    "recall": 0.05215419501133787,
+    "map50": 0.004093078550921595,
+    "map50_95": 0.001747474494739484
+  },
+  "disease_classification": {
+    "status": "zero-shot-pretrained-full-validation",
+    "model": "yolo26n-cls.pt",
+    "fraction": 1.0,
+    "top1": 0.0357142873108387,
+    "top5": 0.08571428805589676
+  }
+}

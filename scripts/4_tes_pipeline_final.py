@@ -23,7 +23,7 @@ COLOR_BOX_LESI = (0, 0, 255)
 # ==========================================
 # 2. BACA GAMBAR & BUAT KANVAS DASHBOARD
 # ==========================================
-path_gambar_tes = "D:/yolocomvis/ujicoba10.png"
+path_gambar_tes = "D:/yolocomvis/ujicoba4.png"
 gambar = cv2.imread(path_gambar_tes)
 
 if gambar is None:
@@ -44,7 +44,7 @@ canvas[0:img_h, 0:img_w] = gambar
 hasil_ikan = deteksi_ikan(gambar)[0]
 
 y_text = 40
-cv2.putText(canvas, "YOLOv26 BASELINE ANALYSIS", (img_w + 20, y_text), cv2.FONT_HERSHEY_DUPLEX, 0.7, COLOR_BOX_FISH, 2)
+cv2.putText(canvas, "YOLO26 BASELINE ANALYSIS", (img_w + 20, y_text), cv2.FONT_HERSHEY_DUPLEX, 0.7, COLOR_BOX_FISH, 2)
 y_text += 40
 
 if len(hasil_ikan.boxes) == 0:
@@ -93,7 +93,7 @@ else:
         y_text += 20
 
         cv2.putText(canvas, "[!] CATATAN SISTEM BASELINE", (img_w + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 150, 255), 1); y_text += 20
-        catatan1 = "Prediksi klasifikasi penyakit ikan berdasarkan model baseline YOLOv26"
+        catatan1 = "Prediksi berdasarkan model baseline YOLO26 tanpa Dynamic Attention"
         catatan2 = "berdasarkan fitur warna global ikan."
         catatan3 = "Karena belum memakai Dynamic Attention,"
         catatan4 = "warna alami ikan dapat memicu false positive."
@@ -112,8 +112,8 @@ print(f"\n📸 Dashboard visual otomatis disimpan di: {path_simpan}")
 # --- BAGIAN BARU: MEMUNCULKAN POP-UP WINDOW ---
 print("Tampilkan pop-up... (Tekan tombol apa saja di keyboard untuk menutup jendela)")
 
-# Memunculkan jendela GUI dengan nama "Hasil Analisis YOLOv26"
-cv2.imshow("Hasil Analisis YOLOv26", canvas)
+# Memunculkan jendela GUI dengan nama "Hasil Analisis YOLO26"
+cv2.imshow("Hasil Analisis YOLO26", canvas)
 
 # Menahan program agar tidak langsung keluar sampai Anda menekan tombol di keyboard
 cv2.waitKey(0)

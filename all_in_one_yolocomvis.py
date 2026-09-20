@@ -267,21 +267,24 @@ def write_dataset_yaml(root: Path) -> tuple[Path, Path]:
     return fish_yaml, lesion_yaml
 
 
-def train_models(root: Path, epochs: int = 10, project: str = "Runs_Baseline") -> dict:
+def train_models(root: Path, epochs: int = 10, project: str = "Runs_Baseline", seed: int = 42) -> dict:
     """Train the two detectors and the disease classifier."""
     from ultralytics import YOLO
 
     fish_yaml, lesion_yaml = write_dataset_yaml(root)
     results = {}
-    results["fish_detection"] = YOLO(str(root / "yolo11n.pt")).train(
-        data=str(fish_yaml), epochs=epochs, imgsz=640, project=project, name="model_ikan"
+    results["fish_detection"] = YOLO("yolo26n.pt").train(
+        data=str(fish_yaml), epochs=epochs, imgsz=640, project=project, name="model_ikan",
+        seed=seed, deterministic=True, resume=False
     )
-    results["lesion_detection"] = YOLO(str(root / "yolo11n.pt")).train(
-        data=str(lesion_yaml), epochs=epochs, imgsz=640, project=project, name="model_lesi"
+    results["lesion_detection"] = YOLO("yolo26n.pt").train(
+        data=str(lesion_yaml), epochs=epochs, imgsz=640, project=project, name="model_lesi",
+        seed=seed, deterministic=True, resume=False
     )
-    results["disease_classification"] = YOLO(str(root / "yolo11n-cls.pt")).train(
+    results["disease_classification"] = YOLO("yolo26n-cls.pt").train(
         data=str(root / "datasets" / "freshwater_kaggle"),
         epochs=epochs, imgsz=224, project=project, name="model_penyakit",
+        seed=seed, deterministic=True, resume=False,
     )
     return results
 
@@ -302,9 +305,9 @@ def evaluate_models(root: Path, project: str = "Runs_Baseline") -> dict:
     from ultralytics import YOLO
 
     model_specs = {
-        "fish_detection": (root / project / "model_ikan" / "weights" / "best.pt", root / "data_ikan_generated.yaml"),
-        "lesion_detection": (root / project / "model_lesi" / "weights" / "best.pt", root / "data_lesi_generated.yaml"),
-        "disease_classification": (root / project / "model_penyakit" / "weights" / "best.pt", root / "datasets" / "freshwater_kaggle"),
+        "fish_detection": (root / "runs" / "detect" / project / "model_ikan" / "weights" / "best.pt", root / "data_ikan_generated.yaml"),
+        "lesion_detection": (root / "runs" / "detect" / project / "model_lesi" / "weights" / "best.pt", root / "data_lesi_generated.yaml"),
+        "disease_classification": (root / "runs" / "classify" / project / "model_penyakit" / "weights" / "best.pt", root / "datasets" / "freshwater_kaggle"),
     }
     report = {}
     for name, (weights, data) in model_specs.items():
@@ -411,7 +414,7 @@ def write_final_report(root: Path, dataset_info: dict | None = None, evaluation:
     report_dir.mkdir(parents=True, exist_ok=True)
     dataset_info = dataset_info or dataset_summary(root)
     evaluation = evaluation or {}
-    lines = ["# Laporan Eksperimen YOLOComVis", "", "## Konfigurasi", "- Task: deteksi ikan, deteksi lesi, klasifikasi penyakit", "- Split deteksi: train/val 80:20", "- Seed: 42", "- Model: YOLO11n dan YOLO11n-cls", "", "## Dataset"]
+    lines = ["# Laporan Eksperimen YOLOComVis", "", "## Konfigurasi", "- Task: deteksi ikan, deteksi lesi, klasifikasi penyakit", "- Split deteksi: train/val 80:20", "- Seed split dan training: 42", "- Model: YOLO26n dan YOLO26n-cls", "- Dynamic Attention: tidak digunakan pada baseline", "", "## Dataset"]
     for name, value in dataset_info.items():
         lines.append(f"### {name}")
         lines.append("```json")
@@ -428,10 +431,11 @@ def run_dashboard(root: Path, image_path: Path, output_path: Path | None = None)
     """Run the three models and save a notebook-friendly dashboard image."""
     from ultralytics import YOLO
 
-    model_dir = root / "Runs_Baseline"
-    fish_model = YOLO(str(model_dir / "model_ikan" / "weights" / "best.pt"))
-    lesion_model = YOLO(str(model_dir / "model_lesi" / "weights" / "best.pt"))
-    classifier = YOLO(str(model_dir / "model_penyakit" / "weights" / "best.pt"))
+    detect_dir = root / "runs" / "detect" / "Runs_Baseline"
+    classify_dir = root / "runs" / "classify" / "Runs_Baseline"
+    fish_model = YOLO(str(detect_dir / "model_ikan" / "weights" / "best.pt"))
+    lesion_model = YOLO(str(detect_dir / "model_lesi" / "weights" / "best.pt"))
+    classifier = YOLO(str(classify_dir / "model_penyakit" / "weights" / "best.pt"))
     image = cv2.imread(str(image_path))
     if image is None:
         raise FileNotFoundError(f"Gambar tidak ditemukan: {image_path}")
@@ -509,7 +513,7 @@ def main() -> None:
         prepare_classification_dataset(root, seed=args.seed)
         save_dataset_report(root)
     if args.mode in ("train", "all"):
-        train_models(root, epochs=args.epochs)
+        train_models(root, epochs=args.epochs, seed=args.seed)
     if args.mode in ("evaluate", "all"):
         evaluation = evaluate_models(root)
         plot_training_curves(root)

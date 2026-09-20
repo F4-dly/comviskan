@@ -1,1 +1,7 @@
 *.zip
+__pycache__/
+*.pyc
+*.cache
+~$*.docx
+\.venv/
+runs/detect/Runs_Baseline/model_ikan-2/
