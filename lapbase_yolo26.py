@@ -14,7 +14,7 @@ from docx.shared import Inches, Pt, RGBColor
 
 
 ROOT = Path(__file__).resolve().parent
-OUTPUT = ROOT / "Laporan_Baseline_YOLOComVis_YOLO26_revisi_lengkap.docx"
+OUTPUT = ROOT / "Laporan_Baseline_YOLOComVis_YOLO26_revisi_dengan_lampiran_kode.docx"
 
 
 def paragraph(doc, text, bold_prefix=None):
@@ -59,6 +59,27 @@ def code(doc, value):
     run = item.add_run(value)
     run.font.name = "Consolas"
     run.font.size = Pt(8)
+
+
+def code_file(doc, path, max_lines=None):
+    text = path.read_text(encoding="utf-8")
+    if max_lines is not None:
+        lines = text.splitlines()
+        text = "\n".join(lines[:max_lines])
+        if len(lines) > max_lines:
+            text += "\n... [bagian berikutnya dijelaskan pada lampiran berikut]"
+    item = doc.add_paragraph()
+    item.paragraph_format.left_indent = Inches(0.12)
+    item.paragraph_format.right_indent = Inches(0.12)
+    item.paragraph_format.space_after = Pt(8)
+    run = item.add_run(text)
+    run.font.name = "Consolas"
+    run.font.size = Pt(6.5)
+    run.font.color.rgb = RGBColor(45, 45, 45)
+
+
+def page_break(doc):
+    doc.add_page_break()
 
 
 def add_image(doc, path, caption, width=5.8):
@@ -213,6 +234,137 @@ def build_report():
     heading(doc, "10. Kesimpulan", 1)
     paragraph(doc, "Revisi telah menyelaraskan kode baseline dengan dasar teori pada pemilihan model: detector sekarang menggunakan YOLO26n dan classifier menggunakan YOLO26n-cls. Pipeline tiga tahap, format dataset, ukuran input, evaluasi, dan dashboard dipertahankan. Dynamic Attention belum digunakan sehingga baseline dapat menjadi pembanding yang bersih untuk eksperimen DAM di tahap berikutnya.")
     paragraph(doc, "Metrik yang tercantum dalam laporan ini adalah metrik YOLO26 pretrained/zero-shot pada seluruh validation set lokal. Hasil tersebut merupakan pemeriksaan awal kompatibilitas model dan dataset, bukan klaim performa fine-tuned. Pelaporan final harus diperbarui setelah training YOLO26 selesai pada perangkat yang memadai.")
+
+    heading(doc, "11. Proses Lengkap dari Awal sampai Akhir", 1)
+    paragraph(doc, "Bagian ini menjelaskan urutan kerja versi terbaru agar proses eksperimen dapat diikuti oleh pembaca yang tidak melihat kode secara langsung.")
+    table(doc, ["Urutan", "Tahap", "Input", "Output"], [
+        ["1", "Menyiapkan environment", "Python, Ultralytics, OpenCV, split-folders", "Environment siap"],
+        ["2", "Menyiapkan data ikan", "Gambar dan mask Fish4Knowledge", "Gambar dan label YOLO fish"],
+        ["3", "Menyiapkan data lesi", "Gambar dan JSON FishDisease", "Gambar dan label YOLO lesion"],
+        ["4", "Menyiapkan klasifikasi", "Folder kelas Freshwater Kaggle", "Train/val tujuh kelas"],
+        ["5", "Validasi struktur", "Folder train/val", "Ringkasan JSON/CSV/Markdown"],
+        ["6", "Training baseline", "YAML dan folder dataset", "Checkpoint YOLO26"],
+        ["7", "Evaluasi", "Checkpoint dan validation set", "Precision, recall, mAP, Top-1, Top-5"],
+        ["8", "Inferensi", "Satu gambar", "Dashboard ikan, lesi, dan klasifikasi"],
+        ["9", "Dokumentasi", "Kode dan artefak", "DOCX laporan revisi"],
+    ])
+    paragraph(doc, "Perbedaan penting versi terbaru adalah model pada tahap training dan evaluasi kini menunjuk YOLO26. Dynamic Attention tidak masuk ke urutan ini sehingga hasil baseline tetap menjadi pembanding sebelum eksperimen DAM.")
+    code(doc, "python all_in_one_yolocomvis.py --mode prepare --seed 42\npython scripts/3_training_all.py\npython scripts/evaluate_yolo26_baseline.py\npython all_in_one_yolocomvis.py --mode dashboard --image ujicoba.png\npython lapbase_yolo26.py")
+
+    page_break(doc)
+    heading(doc, "Lampiran A. Daftar Revisi Kode", 1)
+    paragraph(doc, "Lampiran ini memetakan perubahan dari kode baseline lama ke versi terbaru. Setiap perubahan memiliki dampak langsung terhadap kesesuaian dengan dasar teori dan reproducibility.")
+    table(doc, ["Lokasi", "Sebelum", "Sesudah", "Alasan"], [
+        ["scripts/3_training_all.py", "yolo11n.pt", "yolo26n.pt", "Menyamakan model baseline dengan teori YOLO26"],
+        ["scripts/3_training_all.py", "yolo11n-cls.pt", "yolo26n-cls.pt", "Classifier harus berasal dari keluarga model yang sama"],
+        ["Training", "Seed default/artefak 0", "seed=42", "Split dan training lebih mudah direproduksi"],
+        ["Training", "resume tidak eksplisit", "resume=False", "Mencegah model melanjutkan checkpoint lama tanpa sengaja"],
+        ["Evaluasi", "Checkpoint lama YOLO11", "Checkpoint YOLO26 atau pretrained resmi", "Metrik harus diberi sumber yang jelas"],
+        ["Dashboard", "Teks YOLOv26/YOLO11 tidak konsisten", "YOLO26 baseline", "Menghindari klaim nama model yang salah"],
+        ["Attention", "Belum ada", "Tetap belum ada", "DAM ditunda agar baseline bersih"],
+        ["Laporan", "Metrik lama bercampur dengan revisi", "Status zero-shot/fine-tuning dibedakan", "Mencegah interpretasi hasil yang keliru"],
+    ])
+
+    page_break(doc)
+    heading(doc, "Lampiran B. Kode Training Baseline", 1)
+    paragraph(doc, "File: scripts/3_training_all.py. Script ini adalah entry point paling ringkas untuk melatih tiga model. Dua model deteksi memakai checkpoint YOLO26n, sedangkan classifier memakai YOLO26n-cls.")
+    heading(doc, "B.1 Penjelasan", 2)
+    bullets(doc, [
+        "EPOCHS=10 menjaga anggaran pelatihan sesuai laporan Tugas 2.",
+        "SEED=42 menyamakan konfigurasi dengan pembagian data pada pipeline terpadu.",
+        "YOLO26n dipakai untuk fish detection dan lesion detection karena keduanya adalah task deteksi bounding box.",
+        "YOLO26n-cls dipakai untuk folder klasifikasi karena task-nya image classification.",
+        "deterministic=True membuat proses lebih terkontrol, sedangkan resume=False mencegah melanjutkan run lama.",
+        "Dynamic Attention tidak muncul pada script ini; baseline hanya memakai checkpoint resmi YOLO26.",
+    ])
+    code_file(doc, ROOT / "scripts" / "3_training_all.py")
+
+    page_break(doc)
+    heading(doc, "Lampiran C. Kode Evaluasi Metrik", 1)
+    paragraph(doc, "File: scripts/evaluate_yolo26_baseline.py. Script ini memuat checkpoint pretrained YOLO26 dan menjalankan model.val pada tiga validation set. Hasilnya disimpan sebagai reports/yolo26_baseline_metrics.json.")
+    heading(doc, "C.1 Penjelasan", 2)
+    bullets(doc, [
+        "ROOT membuat lokasi dataset dan output tidak bergantung pada current working directory.",
+        "Tiga tuple konfigurasi memisahkan nama task, checkpoint, data, dan image size.",
+        "imgsz=640 digunakan untuk detector, sedangkan classifier memakai imgsz=224.",
+        "fraction=1.0 berarti seluruh validation set dipakai pada evaluasi yang menghasilkan angka laporan ini.",
+        "Detector membaca result.box untuk precision, recall, mAP50, dan mAP50-95.",
+        "Classifier membaca top1 dan top5.",
+        "Status zero-shot-pretrained-full-validation menandakan checkpoint belum fine-tuning pada dataset lokal.",
+    ])
+    code_file(doc, ROOT / "scripts" / "evaluate_yolo26_baseline.py")
+
+    page_break(doc)
+    heading(doc, "Lampiran D. Kode Preprocessing dan Pipeline Utama", 1)
+    paragraph(doc, "File: all_in_one_yolocomvis.py. File ini menggabungkan persiapan dataset, ringkasan data, pembuatan YAML, training, evaluasi, pembuatan grafik, confusion matrix, dashboard, dan ekspor laporan.")
+    heading(doc, "D.1 Bagian yang direvisi", 2)
+    bullets(doc, [
+        "train_models sekarang memanggil YOLO('yolo26n.pt') dan YOLO('yolo26n-cls.pt').",
+        "train_models meneruskan seed, deterministic, dan resume=False.",
+        "evaluate_models mencari checkpoint pada runs/detect dan runs/classify agar sesuai struktur Ultralytics.",
+        "write_final_report menyebut YOLO26n dan menyatakan Dynamic Attention tidak digunakan.",
+        "run_dashboard memuat checkpoint pada lokasi hasil training deteksi dan klasifikasi yang benar.",
+    ])
+    paragraph(doc, "Karena file ini panjang, lampiran menampilkan blok paling penting yang mengendalikan perubahan model dan evaluasi. Fungsi preprocessing tetap dipertahankan karena format label dan alur dataset tidak berubah.")
+    code_file(doc, ROOT / "all_in_one_yolocomvis.py")
+
+    page_break(doc)
+    heading(doc, "Lampiran E. Kode Inferensi Dashboard", 1)
+    paragraph(doc, "File: scripts/4_tes_pipeline_final.py. Script ini tidak melatih model. Ia memuat tiga best checkpoint, mendeteksi ikan pada gambar penuh, memotong setiap ikan, lalu meneruskan crop ke detector lesi dan classifier.")
+    heading(doc, "E.1 Penjelasan alur", 2)
+    bullets(doc, [
+        "path_ikan dan path_lesi menunjuk checkpoint detector YOLO26.",
+        "path_penyakit menunjuk checkpoint classifier YOLO26-cls.",
+        "hasil_ikan.boxes menjadi sumber koordinat crop ikan.",
+        "Koordinat lesi ditambah offset x1 dan y1 agar kembali ke canvas gambar penuh.",
+        "top5 classifier dipakai untuk menampilkan tiga kelas teratas.",
+        "Teks dashboard menyatakan baseline belum memakai Dynamic Attention.",
+        "cv2.imwrite menyimpan hasil, sedangkan cv2.imshow hanya untuk tampilan interaktif.",
+    ])
+    code_file(doc, ROOT / "scripts" / "4_tes_pipeline_final.py")
+
+    page_break(doc)
+    heading(doc, "Lampiran F. Kode Preprocessing Dataset", 1)
+    paragraph(doc, "Versi terpadu pada all_in_one_yolocomvis.py menjadi preprocessing yang direkomendasikan karena memiliki seed dan clipping bounding box. Script lama tetap disimpan sebagai referensi sejarah, tetapi memiliki random split tanpa seed.")
+    heading(doc, "F.1 Fish4Knowledge", 2)
+    paragraph(doc, "Mask dibaca sebagai grayscale. Kontur terbesar dipakai sebagai representasi satu objek ikan, lalu bounding rectangle dinormalisasi ke format class_id, center_x, center_y, width, height. Pasangan gambar-label diacak memakai Random(seed) dan 20% dipindahkan ke validation.")
+    code_file(doc, ROOT / "scripts" / "1_proses_fish4knowledge.py")
+    heading(doc, "F.2 FishDisease", 2)
+    paragraph(doc, "JSON dibaca satu per satu. Field annotations dipakai untuk mengambil bbox. Versi pipeline terpadu menambahkan clipping ke batas gambar, menolak bbox kosong, dan menggunakan Random(seed) untuk pembagian data.")
+    code_file(doc, ROOT / "scripts" / "2_proses_fishdisease.py")
+
+    page_break(doc)
+    heading(doc, "Lampiran G. Konfigurasi Dataset dan Artefak", 1)
+    paragraph(doc, "YAML berikut mendefinisikan dataset deteksi dan nama kelas. File ini tidak berisi Dynamic Attention; YAML hanya memberi informasi data kepada Ultralytics.")
+    heading(doc, "G.1 data_ikan.yaml", 2)
+    code_file(doc, ROOT / "data_ikan.yaml")
+    heading(doc, "G.2 data_lesi.yaml", 2)
+    code_file(doc, ROOT / "data_lesi.yaml")
+    table(doc, ["Artefak", "Kegunaan"], [
+        ["reports/yolo26_baseline_metrics.json", "Metrik YOLO26 pretrained pada validation set"],
+        ["runs/detect/val-2 dan val-3", "Grafik dan contoh prediksi evaluasi detector"],
+        ["runs/classify/val", "Confusion matrix dan contoh prediksi classifier"],
+        ["Laporan_Baseline...docx", "Laporan versi terbaru dengan lampiran kode"],
+        ["yolo26n.pt dan yolo26n-cls.pt", "Checkpoint pretrained baseline YOLO26"],
+    ])
+
+    page_break(doc)
+    heading(doc, "Lampiran H. Cara Membaca Metrik dan Batas Klaim", 1)
+    paragraph(doc, "Precision mengukur proporsi prediksi positif yang benar. Recall mengukur proporsi objek ground truth yang berhasil ditemukan. mAP50 adalah mean average precision pada IoU 0,50, sedangkan mAP50-95 merata-ratakan AP pada rentang IoU 0,50 sampai 0,95. Top-1 menunjukkan kelas dengan probabilitas tertinggi benar, sedangkan Top-5 menunjukkan label benar berada di antara lima prediksi teratas.")
+    paragraph(doc, "Metrik YOLO26 pada laporan ini adalah zero-shot/pretrained: bobot umum YOLO26 diuji pada data ikan dan penyakit lokal tanpa proses fine-tuning yang selesai. Karena itu, angka rendah pada deteksi lesi dan klasifikasi tidak boleh langsung dipakai untuk menyimpulkan bahwa arsitektur YOLO26 gagal. Angka tersebut menunjukkan domain gap dan menjadi baseline awal sebelum training lokal.")
+    paragraph(doc, "Sebaliknya, angka pada laporan lama berasal dari fine-tuning YOLO11 dan tidak boleh dibandingkan sebagai eksperimen terkontrol sempurna dengan angka YOLO26 zero-shot. Perbandingan yang valid membutuhkan data split, seed, epoch, perangkat, dan status fine-tuning yang sama.")
+
+    heading(doc, "Lampiran I. Checklist Reproduksi", 1)
+    bullets(doc, [
+        "Pastikan Python environment aktif dan paket ultralytics, opencv-python, numpy, python-docx, Pillow, split-folders, pandas tersedia.",
+        "Pastikan data_ikan.yaml, data_lesi.yaml, dan folder freshwater_kaggle dapat dibaca.",
+        "Jalankan mode prepare bila dataset dibangun dari data mentah.",
+        "Jalankan scripts/3_training_all.py pada GPU/Colab untuk menyelesaikan fine-tuning 10 epoch.",
+        "Jalankan scripts/evaluate_yolo26_baseline.py atau all_in_one_yolocomvis.py --mode evaluate.",
+        "Jalankan scripts/4_tes_pipeline_final.py atau mode dashboard untuk uji satu gambar.",
+        "Periksa args.yaml, results.csv, best.pt, confusion matrix, dan contoh prediksi sebelum menulis metrik final.",
+        "Jangan menyebut DAM digunakan sebelum ada implementasi dan eksperimen pembanding yang terpisah.",
+    ])
 
     heading(doc, "Lampiran. Perintah Reproduksi", 1)
     code(doc, "python scripts/3_training_all.py\npython scripts/evaluate_yolo26_baseline.py\npython all_in_one_yolocomvis.py --mode evaluate\npython all_in_one_yolocomvis.py --mode dashboard --image ujicoba.png\npython lapbase_yolo26.py")
