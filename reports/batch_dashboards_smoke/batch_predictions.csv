@@ -1,0 +1,4 @@
+dashboard,fish_count,image,lesion_count,mean_fish_confidence,status,top_class,top_probability
+D:\yolocomvis\reports\batch_dashboards_smoke\fish_000000009598_05281_dashboard.jpg,1,D:\yolocomvis\datasets\fish4knowledge\images\val\fish_000000009598_05281.png,0,0.853243,ok,Bacterial diseases - Aeromoniasis,0.454279
+D:\yolocomvis\reports\batch_dashboards_smoke\fish_000000009598_05283_dashboard.jpg,1,D:\yolocomvis\datasets\fish4knowledge\images\val\fish_000000009598_05283.png,0,0.843887,ok,Viral diseases White tail disease,0.800426
+D:\yolocomvis\reports\batch_dashboards_smoke\fish_000000009598_05285_dashboard.jpg,1,D:\yolocomvis\datasets\fish4knowledge\images\val\fish_000000009598_05285.png,0,0.847501,ok,Bacterial diseases - Aeromoniasis,0.760015

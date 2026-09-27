@@ -14,6 +14,9 @@ import numpy as np
 
 
 IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
+FISH_CONF_THRESHOLD = 0.50
+LESION_CONF_THRESHOLD = 0.25
+REVIEW_CLASSIFICATION_THRESHOLD = 0.80
 
 
 def _image_files(directory: Path) -> list[Path]:
@@ -190,11 +193,17 @@ def prepare_lesion_dataset(root: Path, val_ratio: float = 0.2, seed: int = 42) -
 
             image_path = raw_dir / data.get("image", "")
             if not image_path.is_file():
+                # A page can contain many photos. Never attach an annotation to
+                # an arbitrary first image when its declared image path is bad.
+                image_name = Path(str(data.get("image", ""))).name
                 page_dir = raw_dir / json_path.parent.name
-                image_candidates = sorted(
-                    path for path in page_dir.iterdir() if path.suffix.lower() in IMAGE_EXTENSIONS
-                ) if page_dir.is_dir() else []
-                image_path = image_candidates[0] if image_candidates else Path()
+                candidates = [page_dir / image_name] if image_name else []
+                candidates.extend(
+                    path for path in json_path.parent.iterdir()
+                    if path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
+                    and path.stem.lower() == json_path.stem.lower()
+                ) if json_path.parent.is_dir() else None
+                image_path = next((path for path in candidates if path.is_file()), Path())
             if not image_path.is_file():
                 counters["missing_image"] += 1
                 continue
@@ -267,24 +276,48 @@ def write_dataset_yaml(root: Path) -> tuple[Path, Path]:
     return fish_yaml, lesion_yaml
 
 
-def train_models(root: Path, epochs: int = 10, project: str = "Runs_Baseline", seed: int = 42) -> dict:
-    """Train the two detectors and the disease classifier."""
+def _dynamic_attention_models(root: Path):
+    """Register the custom layer and return the YOLO26 DynamicAttention graphs."""
+    from dynamic_attention import register_dynamic_attention
+
+    register_dynamic_attention()
+    return (
+        root / "models" / "yolo26n_dynamic_attention.yaml",
+        root / "models" / "yolo26n_cls_dynamic_attention.yaml",
+    )
+
+
+def train_models(
+    root: Path,
+    epochs: int = 10,
+    project: str = "Runs_DynamicAttention",
+    seed: int = 42,
+    device: str | int | None = None,
+    batch: int | None = None,
+) -> dict:
+    """Train YOLO26 with DynamicAttention for all three pipeline tasks."""
+    import torch
     from ultralytics import YOLO
 
+    detection_model, classification_model = _dynamic_attention_models(root)
     fish_yaml, lesion_yaml = write_dataset_yaml(root)
+    training_device = device if device is not None else (0 if torch.cuda.is_available() else "cpu")
+    training_batch = batch if batch is not None else (8 if torch.cuda.is_available() else 4)
+    common = {
+        "seed": seed, "deterministic": True, "resume": False,
+        "device": training_device, "batch": training_batch, "workers": 2,
+        "amp": bool(torch.cuda.is_available()), "max_det": 100, "plots": False,
+    }
     results = {}
-    results["fish_detection"] = YOLO("yolo26n.pt").train(
-        data=str(fish_yaml), epochs=epochs, imgsz=640, project=project, name="model_ikan",
-        seed=seed, deterministic=True, resume=False
+    results["fish_detection"] = YOLO(str(detection_model)).load("yolo26n.pt").train(
+        data=str(fish_yaml), epochs=epochs, imgsz=640, project=project, name="model_ikan", **common
     )
-    results["lesion_detection"] = YOLO("yolo26n.pt").train(
-        data=str(lesion_yaml), epochs=epochs, imgsz=640, project=project, name="model_lesi",
-        seed=seed, deterministic=True, resume=False
+    results["lesion_detection"] = YOLO(str(detection_model)).load("yolo26n.pt").train(
+        data=str(lesion_yaml), epochs=epochs, imgsz=640, project=project, name="model_lesi", **common
     )
-    results["disease_classification"] = YOLO("yolo26n-cls.pt").train(
+    results["disease_classification"] = YOLO(str(classification_model)).load("yolo26n-cls.pt").train(
         data=str(root / "datasets" / "freshwater_kaggle"),
-        epochs=epochs, imgsz=224, project=project, name="model_penyakit",
-        seed=seed, deterministic=True, resume=False,
+        epochs=epochs, imgsz=224, project=project, name="model_penyakit", **common
     )
     return results
 
@@ -300,12 +333,17 @@ def _metric_value(metrics, *names: str):
     return None
 
 
-def evaluate_models(root: Path, project: str = "Runs_Baseline") -> dict:
+def evaluate_models(root: Path, project: str = "Runs_DynamicAttention") -> dict:
     """Run validation and export numeric metrics for all trained models."""
     from ultralytics import YOLO
 
+    _dynamic_attention_models(root)
+
+    detect_root = root / "runs" / "detect" / project
+    fish_runs = sorted(detect_root.glob("model_ikan*/weights/best.pt"))
+    fish_weights = fish_runs[-1] if fish_runs else detect_root / "model_ikan" / "weights" / "best.pt"
     model_specs = {
-        "fish_detection": (root / "runs" / "detect" / project / "model_ikan" / "weights" / "best.pt", root / "data_ikan_generated.yaml"),
+        "fish_detection": (fish_weights, root / "data_ikan_generated.yaml"),
         "lesion_detection": (root / "runs" / "detect" / project / "model_lesi" / "weights" / "best.pt", root / "data_lesi_generated.yaml"),
         "disease_classification": (root / "runs" / "classify" / project / "model_penyakit" / "weights" / "best.pt", root / "datasets" / "freshwater_kaggle"),
     }
@@ -335,14 +373,15 @@ def evaluate_models(root: Path, project: str = "Runs_Baseline") -> dict:
     return report
 
 
-def plot_training_curves(root: Path, project: str = "Runs_Baseline") -> list[Path]:
+def plot_training_curves(root: Path, project: str = "Runs_DynamicAttention") -> list[Path]:
     """Create readable training curve images from Ultralytics results.csv files."""
     import matplotlib.pyplot as plt
     import pandas as pd
 
     output_paths = []
     for model_name in ("model_ikan", "model_lesi", "model_penyakit"):
-        results_csv = root / project / model_name / "results.csv"
+        task_root = "classify" if model_name == "model_penyakit" else "detect"
+        results_csv = root / "runs" / task_root / project / model_name / "results.csv"
         if not results_csv.exists():
             continue
         frame = pd.read_csv(results_csv)
@@ -368,12 +407,14 @@ def plot_training_curves(root: Path, project: str = "Runs_Baseline") -> list[Pat
     return output_paths
 
 
-def classification_confusion_matrix(root: Path, project: str = "Runs_Baseline") -> Path | None:
+def classification_confusion_matrix(root: Path, project: str = "Runs_DynamicAttention") -> Path | None:
     """Build and save a confusion matrix from the classification validation split."""
     import matplotlib.pyplot as plt
     from ultralytics import YOLO
 
-    weights = root / project / "model_penyakit" / "weights" / "best.pt"
+    _dynamic_attention_models(root)
+
+    weights = root / "runs" / "classify" / project / "model_penyakit" / "weights" / "best.pt"
     validation_dir = root / "datasets" / "freshwater_kaggle" / "val"
     if not weights.exists() or not validation_dir.exists():
         print("Confusion matrix dilewati: checkpoint atau folder val belum tersedia.")
@@ -414,7 +455,7 @@ def write_final_report(root: Path, dataset_info: dict | None = None, evaluation:
     report_dir.mkdir(parents=True, exist_ok=True)
     dataset_info = dataset_info or dataset_summary(root)
     evaluation = evaluation or {}
-    lines = ["# Laporan Eksperimen YOLOComVis", "", "## Konfigurasi", "- Task: deteksi ikan, deteksi lesi, klasifikasi penyakit", "- Split deteksi: train/val 80:20", "- Seed split dan training: 42", "- Model: YOLO26n dan YOLO26n-cls", "- Dynamic Attention: tidak digunakan pada baseline", "", "## Dataset"]
+    lines = ["# Laporan Eksperimen YOLOComVis", "", "## Konfigurasi", "- Task: deteksi ikan, deteksi lesi, klasifikasi penyakit", "- Split deteksi: train/val 80:20", "- Seed split dan training: 42", "- Model: YOLO26n dan YOLO26n-cls", "- Attention: DynamicAttention pada fitur backbone terdalam", "", "## Dataset"]
     for name, value in dataset_info.items():
         lines.append(f"### {name}")
         lines.append("```json")
@@ -431,16 +472,24 @@ def run_dashboard(root: Path, image_path: Path, output_path: Path | None = None)
     """Run the three models and save a notebook-friendly dashboard image."""
     from ultralytics import YOLO
 
-    detect_dir = root / "runs" / "detect" / "Runs_Baseline"
-    classify_dir = root / "runs" / "classify" / "Runs_Baseline"
-    fish_model = YOLO(str(detect_dir / "model_ikan" / "weights" / "best.pt"))
+    from dynamic_attention import register_dynamic_attention
+
+    register_dynamic_attention()
+    detect_dir = root / "runs" / "detect" / "Runs_DynamicAttention"
+    classify_dir = root / "runs" / "classify" / "Runs_DynamicAttention"
+    fish_runs = sorted(
+        detect_dir.glob("model_ikan*/weights/best.pt"),
+        key=lambda path: (path.stat().st_mtime_ns, path.as_posix()),
+    )
+    fish_weights = fish_runs[-1] if fish_runs else detect_dir / "model_ikan" / "weights" / "best.pt"
+    fish_model = YOLO(str(fish_weights))
     lesion_model = YOLO(str(detect_dir / "model_lesi" / "weights" / "best.pt"))
     classifier = YOLO(str(classify_dir / "model_penyakit" / "weights" / "best.pt"))
     image = cv2.imread(str(image_path))
     if image is None:
         raise FileNotFoundError(f"Gambar tidak ditemukan: {image_path}")
 
-    result = fish_model(image, verbose=False)[0]
+    result = fish_model(image, conf=FISH_CONF_THRESHOLD, verbose=False)[0]
     canvas = image.copy()
     panel_width = 440
     panel = np.full((max(image.shape[0], 520), panel_width, 3), (30, 30, 35), dtype=np.uint8)
@@ -448,8 +497,15 @@ def run_dashboard(root: Path, image_path: Path, output_path: Path | None = None)
         canvas, 0, panel.shape[0] - canvas.shape[0], 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0)
     ), panel))
     y_text = 38
-    cv2.putText(canvas, "YOLO FISH ANALYSIS", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_DUPLEX, 0.7, (0, 215, 255), 2)
+    cv2.putText(canvas, "HASIL PREDIKSI MODEL", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_DUPLEX, 0.66, (0, 215, 255), 2)
     y_text += 40
+    cv2.putText(canvas, "Bukan diagnosis / kepastian kondisi", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.43, (0, 180, 255), 1)
+    y_text += 28
+
+    if len(result.boxes) == 0:
+        cv2.putText(canvas, "Ikan tidak terdeteksi oleh model", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 180, 255), 1)
+        y_text += 25
+        cv2.putText(canvas, "Bukan bukti ikan tidak ada.", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.48, (0, 180, 255), 1)
 
     for box in result.boxes:
         x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
@@ -458,28 +514,117 @@ def run_dashboard(root: Path, image_path: Path, output_path: Path | None = None)
         if crop.size == 0:
             continue
         cv2.rectangle(canvas, (x1, y1), (x2, y2), (0, 215, 255), 2)
-        lesion_result = lesion_model(crop, verbose=False)[0]
+        lesion_result = lesion_model(crop, conf=LESION_CONF_THRESHOLD, verbose=False)[0]
+        lesion_count = len(lesion_result.boxes)
         for lesion in lesion_result.boxes:
             lx1, ly1, lx2, ly2 = map(int, lesion.xyxy[0].tolist())
+            lesion_confidence = float(lesion.conf[0]) * 100
             cv2.rectangle(canvas, (x1 + lx1, y1 + ly1), (x1 + lx2, y1 + ly2), (0, 0, 255), 2)
+            cv2.putText(canvas, f"lesion {lesion_confidence:.0f}%", (x1 + lx1, max(12, y1 + ly1 - 4)), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (0, 0, 255), 1)
         classification = classifier(crop, verbose=False)[0]
         top_indices = classification.probs.top5[:3]
-        cv2.putText(canvas, f"Fish: {confidence:.1f}%", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (255, 255, 255), 1)
+        top_probability = float(classification.probs.data[int(classification.probs.top1)])
+        cv2.putText(canvas, f"Skor deteksi ikan: {confidence:.1f}% (bukan akurasi)", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.46, (255, 255, 255), 1)
         y_text += 30
-        cv2.putText(canvas, f"Lesions: {len(lesion_result.boxes)}", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (180, 180, 180), 1)
+        cv2.putText(canvas, f"Kotak lesi (skor >= {LESION_CONF_THRESHOLD:.2f}): {lesion_count}", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.48, (180, 180, 180), 1)
         y_text += 32
         for index in top_indices:
             name = classifier.names[int(index)]
             probability = float(classification.probs.data[int(index)]) * 100
-            cv2.putText(canvas, f"{name}: {probability:.1f}%", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.48, (120, 220, 150), 1)
+            cv2.putText(canvas, f"{name}: skor {probability:.1f}%", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (120, 220, 150), 1)
             y_text += 24
+        status = "Perlu tinjauan manusia" if top_probability < REVIEW_CLASSIFICATION_THRESHOLD else "Tetap perlu verifikasi manusia"
+        cv2.putText(canvas, f"{status}", (image.shape[1] + 20, y_text), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 180, 255), 1)
+        y_text += 28
         y_text += 18
 
-    destination = output_path or root / "hasil_dashboard_baseline.jpg"
+    footer_y = min(panel.shape[0] - 12, max(y_text + 8, panel.shape[0] - 45))
+    cv2.putText(canvas, "Model dilatih pada dataset/domain berbeda.", (image.shape[1] + 20, footer_y), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (0, 180, 255), 1)
+    cv2.putText(canvas, "Hasil lesi negatif tidak menyingkirkan lesi.", (image.shape[1] + 20, footer_y + 20 if footer_y + 20 < panel.shape[0] else footer_y), cv2.FONT_HERSHEY_SIMPLEX, 0.38, (0, 180, 255), 1)
+
+    destination = output_path or root / "hasil_dashboard_dynamic_attention.jpg"
     destination.parent.mkdir(parents=True, exist_ok=True)
     cv2.imwrite(str(destination), canvas)
     print(f"Dashboard disimpan di: {destination}")
     return destination
+
+
+def run_batch_dashboards(
+    root: Path,
+    input_dir: Path,
+    output_dir: Path | None = None,
+    limit: int | None = None,
+) -> Path:
+    """Generate dashboards and a prediction summary for every image in a folder."""
+    import csv
+    from ultralytics import YOLO
+
+    from dynamic_attention import register_dynamic_attention
+
+    register_dynamic_attention()
+    input_dir = Path(input_dir).expanduser().resolve()
+    if not input_dir.exists():
+        raise FileNotFoundError(f"Folder gambar tidak ditemukan: {input_dir}")
+    output_dir = (output_dir or root / "reports" / "batch_dashboards").expanduser().resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    detect_dir = root / "runs" / "detect" / "Runs_DynamicAttention"
+    classify_dir = root / "runs" / "classify" / "Runs_DynamicAttention"
+    fish_runs = sorted(detect_dir.glob("model_ikan*/weights/best.pt"))
+    fish_model = YOLO(str(fish_runs[-1]))
+    lesion_model = YOLO(str(detect_dir / "model_lesi" / "weights" / "best.pt"))
+    classifier = YOLO(str(classify_dir / "model_penyakit" / "weights" / "best.pt"))
+
+    image_paths = _image_files(input_dir)
+    if limit is not None:
+        image_paths = image_paths[:limit]
+    if not image_paths:
+        raise FileNotFoundError(f"Tidak ada gambar yang didukung di {input_dir}")
+
+    rows = []
+    for image_path in image_paths:
+        image = cv2.imread(str(image_path))
+        if image is None:
+            rows.append({"image": str(image_path), "status": "gagal_dibaca"})
+            continue
+        fish_result = fish_model(image, conf=FISH_CONF_THRESHOLD, verbose=False)[0]
+        fish_count = len(fish_result.boxes)
+        fish_confidences = [float(value) for value in fish_result.boxes.conf.tolist()]
+        lesion_count = 0
+        fish_predictions = []
+        for box in fish_result.boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
+            crop = image[max(0, y1):min(image.shape[0], y2), max(0, x1):min(image.shape[1], x2)]
+            if crop.size == 0:
+                continue
+            lesion_result = lesion_model(crop, conf=LESION_CONF_THRESHOLD, verbose=False)[0]
+            lesion_count += len(lesion_result.boxes)
+            classification = classifier(crop, verbose=False)[0]
+            class_index = int(classification.probs.top1)
+            top_probability = float(classification.probs.data[class_index])
+            fish_predictions.append({
+                "class": str(classifier.names[class_index]),
+                "confidence": round(top_probability, 6),
+                "status": "model_result" if top_probability >= REVIEW_CLASSIFICATION_THRESHOLD else "review_manual",
+            })
+        dashboard_path = output_dir / f"{image_path.stem}_dashboard.jpg"
+        run_dashboard(root, image_path, dashboard_path)
+        rows.append({
+            "image": str(image_path), "dashboard": str(dashboard_path), "status": "ok",
+            "fish_count": fish_count,
+            "mean_fish_confidence": round(sum(fish_confidences) / len(fish_confidences), 6) if fish_confidences else None,
+            "lesion_count": lesion_count, "fish_predictions": json.dumps(fish_predictions, ensure_ascii=True),
+        })
+
+    summary_path = output_dir / "batch_predictions.csv"
+    fieldnames = sorted({key for row in rows for key in row})
+    with summary_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    print(f"Batch dashboard selesai: {len(rows)} gambar")
+    print(f"Ringkasan prediksi: {summary_path}")
+    return summary_path
 
 
 def export_to_drive(source_dir: Path, drive_dir: Path) -> Path:
@@ -500,9 +645,14 @@ def export_to_drive(source_dir: Path, drive_dir: Path) -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent)
-    parser.add_argument("--mode", choices=("prepare", "train", "evaluate", "report", "dashboard", "all"), default="prepare")
+    parser.add_argument("--mode", choices=("prepare", "train", "evaluate", "report", "dashboard", "batch-dashboard", "all"), default="prepare")
     parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--device", default=None, help="CUDA device index, for example 0; auto-detect by default")
+    parser.add_argument("--batch", type=int, default=None, help="Batch size; auto-select by device memory by default")
     parser.add_argument("--image", type=Path, default=None)
+    parser.add_argument("--input-dir", type=Path, default=None, help="Folder gambar untuk mode batch-dashboard")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Folder output dashboard batch")
+    parser.add_argument("--limit", type=int, default=None, help="Jumlah gambar maksimum pada mode batch-dashboard")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     root = args.root.expanduser().resolve()
@@ -513,7 +663,7 @@ def main() -> None:
         prepare_classification_dataset(root, seed=args.seed)
         save_dataset_report(root)
     if args.mode in ("train", "all"):
-        train_models(root, epochs=args.epochs, seed=args.seed)
+        train_models(root, epochs=args.epochs, seed=args.seed, device=args.device, batch=args.batch)
     if args.mode in ("evaluate", "all"):
         evaluation = evaluate_models(root)
         plot_training_curves(root)
@@ -528,6 +678,10 @@ def main() -> None:
     if args.mode in ("dashboard", "all"):
         image_path = args.image or root / "ujicoba.png"
         run_dashboard(root, image_path)
+    if args.mode == "batch-dashboard":
+        if args.input_dir is None:
+            parser.error("--input-dir wajib diisi untuk mode batch-dashboard")
+        run_batch_dashboards(root, args.input_dir, args.output_dir, args.limit)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,24 @@
+{
+  "fish_detection": {
+    "status": "ok",
+    "precision": 0.3600949593008111,
+    "recall": 0.9968193835521021,
+    "map50": 0.3757105942259617,
+    "map50_95": 0.34459740178248155,
+    "weights": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_ikan-4\\weights\\best.pt"
+  },
+  "lesion_detection": {
+    "status": "ok",
+    "precision": 0.5966513727985204,
+    "recall": 0.45283147900271203,
+    "map50": 0.4898693439184679,
+    "map50_95": 0.1913380153173588,
+    "weights": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_lesi\\weights\\best.pt"
+  },
+  "disease_classification": {
+    "status": "ok",
+    "top1": 0.9942857027053833,
+    "top5": 1.0,
+    "weights": "D:\\yolocomvis\\runs\\classify\\Runs_DynamicAttention\\model_penyakit\\weights\\best.pt"
+  }
+}

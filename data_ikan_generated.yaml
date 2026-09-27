@@ -1,0 +1,5 @@
+path: D:/yolocomvis/datasets/fish4knowledge
+train: images/train
+val: images/val
+names:
+  0: fish

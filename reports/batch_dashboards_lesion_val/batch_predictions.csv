@@ -1,0 +1,21 @@
+dashboard,fish_count,image,lesion_count,mean_fish_confidence,status,top_class,top_probability
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page100_img20_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page100_img20.jpeg,0,0.382186,ok,Bacterial diseases - Aeromoniasis,0.834128
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page100_img21_dashboard.jpg,2,D:\yolocomvis\datasets\fishdisease\images\val\page100_img21.jpeg,1,0.351651,ok,Bacterial diseases - Aeromoniasis,0.791085
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page100_img4_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page100_img4.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img16_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page101_img16.jpeg,1,0.478904,ok,Healthy Fish,0.652654
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img18_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page101_img18.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img2_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page101_img2.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img20_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page101_img20.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img30_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page101_img30.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img31_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page101_img31.jpeg,0,0.251612,ok,Fungal diseases Saprolegniasis,0.449568
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img35_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page101_img35.jpeg,1,0.413087,ok,Bacterial diseases - Aeromoniasis,0.648602
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img39_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page101_img39.jpeg,0,0.670605,ok,Parasitic diseases,0.426037
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img41_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page101_img41.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page101_img42_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page101_img42.jpeg,0,0.419026,ok,Healthy Fish,0.460848
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page102_img14_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page102_img14.jpeg,0,0.379833,ok,Bacterial diseases - Aeromoniasis,0.452424
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page102_img2_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page102_img2.jpeg,0,0.531005,ok,Healthy Fish,0.736442
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page102_img25_dashboard.jpg,1,D:\yolocomvis\datasets\fishdisease\images\val\page102_img25.jpeg,0,0.462682,ok,Healthy Fish,0.766548
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page102_img27_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page102_img27.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page102_img7_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page102_img7.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page102_img8_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page102_img8.jpeg,0,,ok,,
+D:\yolocomvis\reports\batch_dashboards_lesion_val\page104_img2_dashboard.jpg,0,D:\yolocomvis\datasets\fishdisease\images\val\page104_img2.jpeg,0,,ok,,
