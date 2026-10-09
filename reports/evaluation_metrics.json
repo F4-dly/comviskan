@@ -1,24 +1,41 @@
 {
+  "evaluation_timestamp_utc": "2026-10-09T02:32:32.647108+00:00",
+  "runtime": {
+    "python": "3.14.4",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
   "fish_detection": {
     "status": "ok",
-    "precision": 0.3600949593008111,
-    "recall": 0.9968193835521021,
-    "map50": 0.3757105942259617,
-    "map50_95": 0.34459740178248155,
-    "weights": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_ikan-4\\weights\\best.pt"
+    "precision": 0.9989171128943028,
+    "recall": 0.9983579638752053,
+    "map50": 0.9949876644736843,
+    "map50_95": 0.821474928434923,
+    "weights": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_ikan_lowmem\\weights\\best.pt"
   },
   "lesion_detection": {
     "status": "ok",
-    "precision": 0.5966513727985204,
-    "recall": 0.45283147900271203,
-    "map50": 0.4898693439184679,
-    "map50_95": 0.1913380153173588,
+    "precision": 0.6925376631398874,
+    "recall": 0.45,
+    "map50": 0.5445718757240362,
+    "map50_95": 0.23530033246692858,
     "weights": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_lesi\\weights\\best.pt"
   },
   "disease_classification": {
     "status": "ok",
     "top1": 0.9942857027053833,
     "top5": 1.0,
-    "weights": "D:\\yolocomvis\\runs\\classify\\Runs_DynamicAttention\\model_penyakit\\weights\\best.pt"
+    "weights": "D:\\yolocomvis\\runs\\classify\\Runs_DynamicAttention\\model_penyakit\\weights\\best.pt",
+    "image_count": 700,
+    "accuracy": 0.9942857142857143,
+    "macro_precision": 0.9943422913719944,
+    "macro_recall": 0.9942857142857143,
+    "macro_f1": 0.9942927144607187,
+    "weighted_precision": 0.9943422913719941,
+    "weighted_recall": 0.9942857142857142,
+    "weighted_f1": 0.9942927144607185,
+    "latency_ms_mean": 6.625301285634383,
+    "latency_ms_p50": 5.87305000226479,
+    "latency_ms_p95": 10.645890002342632,
+    "latency_note": "Per image, includes preprocessing and model inference; excludes model loading and disk I/O."
   }
 }

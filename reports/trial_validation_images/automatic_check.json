@@ -1,0 +1,125 @@
+{
+  "status": "validation_sample_not_independent_test",
+  "sample_images": 12,
+  "iou_threshold": 0.5,
+  "rows": [
+    {
+      "image": "fish_000000009598_05281.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05283.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05285.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 0,
+      "true_positive_iou50": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05287.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05351.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05352.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 0,
+      "true_positive_iou50": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05359.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05362.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 0,
+      "true_positive_iou50": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05364.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05366.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05369.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 0,
+      "true_positive_iou50": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "status": "checked_against_dataset_label"
+    },
+    {
+      "image": "fish_000000009598_05379.png",
+      "ground_truth_fish": 1,
+      "predicted_fish": 1,
+      "true_positive_iou50": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "status": "checked_against_dataset_label"
+    }
+  ],
+  "totals": {
+    "ground_truth_fish": 12,
+    "predicted_fish": 8,
+    "true_positive_iou50": 8,
+    "false_positive": 0,
+    "false_negative": 4
+  },
+  "precision": 1.0,
+  "recall": 0.6666666666666666,
+  "note": "Correctness is checked only against existing dataset fish boxes. It does not verify lesion or disease correctness and is not expert-reviewed."
+}

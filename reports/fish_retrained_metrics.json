@@ -1,0 +1,21 @@
+﻿{
+    "generated_at_utc":  "2026-10-08T19:11:44.4081929Z",
+    "status":  "validation_only_not_independent_test",
+    "checkpoint":  "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_ikan_lowmem\\weights\\best.pt",
+    "training_config":  {
+                            "epochs":  10,
+                            "seed":  42,
+                            "batch":  1,
+                            "imgsz":  320,
+                            "cache":  false,
+                            "mosaic":  0,
+                            "initialization":  "model_ikan-9/weights/last.pt"
+                        },
+    "metrics":  {
+                    "precision":  0.99891711289430285,
+                    "recall":  0.99835796387520526,
+                    "map50":  0.99498766447368425,
+                    "map50_95":  0.821474928434923
+                },
+    "note":  "Evaluated on rebuilt validation split (2436 images), not the locked candidate test manifest and not expert-reviewed independent evidence."
+}

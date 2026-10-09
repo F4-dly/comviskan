@@ -1,0 +1,5 @@
+dataset,split,images,labels,objects
+fish_detection,train,9682,9682,9682
+fish_detection,val,2420,2420,2420
+lesion_detection,train,929,929,1705
+lesion_detection,val,226,226,441

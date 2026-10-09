@@ -1,0 +1,67 @@
+﻿{
+    "training":  {
+                     "full_mixed_attempt":  {
+                                                "dataset":  "datasets/fish_mixed_v1",
+                                                "epochs_requested":  10,
+                                                "status":  "stopped_before_completion_due_to_runtime",
+                                                "reason":  "batch 1 at imgsz 320 over 10,610 images was approximately 18 minutes per epoch",
+                                                "checkpoint":  "runs/detect/Runs_DynamicAttention/model_ikan_mixed_v1/weights/best.pt",
+                                                "usable_for_claims":  false
+                                            },
+                     "compact_mixed":  {
+                                           "dataset":  "datasets/fish_mixed_v1_compact",
+                                           "epochs":  5,
+                                           "checkpoint":  "runs/detect/Runs_DynamicAttention/model_ikan_mixed_v1_compact/weights/best.pt",
+                                           "fish4k_train_images":  1500,
+                                           "fish4k_val_images":  400,
+                                           "fish_v1_train_images":  944,
+                                           "fish_v1_val_images":  270
+                                       }
+                 },
+    "comparison":  {
+                       "current_lowmem":  {
+                                              "fish4knowledge_val":  {
+                                                                         "precision":  0.998845,
+                                                                         "recall":  0.995484,
+                                                                         "map50":  0.995,
+                                                                         "map50_95":  0.822486
+                                                                     },
+                                              "fish_v1_test":  {
+                                                                   "precision":  0.144846,
+                                                                   "recall":  0.048309,
+                                                                   "map50":  0.009667,
+                                                                   "map50_95":  0.00247
+                                                               },
+                                              "user_images_detected_at_025":  2
+                                          },
+                       "mixed_compact":  {
+                                             "fish4knowledge_val":  {
+                                                                        "precision":  0.715932,
+                                                                        "recall":  0.775452,
+                                                                        "map50":  0.708993,
+                                                                        "map50_95":  0.397467
+                                                                    },
+                                             "fish_v1_test":  {
+                                                                  "precision":  0.432433,
+                                                                  "recall":  0.173913,
+                                                                  "map50":  0.236069,
+                                                                  "map50_95":  0.086755
+                                                              },
+                                             "user_images_detected_at_025":  4
+                                         }
+                   },
+    "decision":  "mixed_compact_selected_as_default_for_user-domain_testing",
+    "limitations":  [
+                        "Fish v1 test is a dataset holdout, not expert-reviewed real user data.",
+                        "The compact experiment used only 1,500 Fish4Knowledge train and 400 validation images for runtime practicality.",
+                        "No claim is made that a detected box is clinically or semantically correct without review."
+                    ],
+    "default_checkpoint":  "runs/detect/Runs_DynamicAttention/model_ikan_mixed_v1_compact/weights/best.pt",
+    "default_selection_reason":  "It is the only tested checkpoint that improved the held-out Fish v1 target-domain test and increased user-image coverage from 2/10 to 4/10 at confidence 0.25. The older checkpoint remains archived, not used by normal dashboard runs.",
+    "rerun_status":  {
+                         "requested":  "rerun ikan1-10 dashboards",
+                         "status":  "blocked_by_windows_resource",
+                         "error":  "WinError 1455: paging file too small while loading torch CUDA DLL",
+                         "outputs_not_claimed":  "The new batch was not completed after the resource error."
+                     }
+}

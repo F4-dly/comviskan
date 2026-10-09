@@ -1,0 +1,33 @@
+﻿{
+    "generated_at_utc":  "2026-10-09T02:40:36.3633749Z",
+    "stage":  8,
+    "status":  "observed_error_analysis_not_ground_truth_error_rates",
+    "source":  "reports/end_to_end_smoke_test/batch_predictions.csv",
+    "sample_images":  10,
+    "observed_counts":  {
+                            "fish_not_detected":  3,
+                            "classification_review_manual":  6,
+                            "lesion_candidates_detected":  4,
+                            "no_lesion_candidate":  6
+                        },
+    "cases":  {
+                  "fish_not_detected":  [
+                                            "fish_000000009598_05285.png",
+                                            "fish_000000009598_05352.png",
+                                            "fish_000000009598_05362.png"
+                                        ],
+                  "lesion_candidates_high_count":  [
+                                                       "fish_000000009598_05351.png",
+                                                       "fish_000000009598_05359.png",
+                                                       "fish_000000009598_05364.png",
+                                                       "fish_000000009598_05366.png"
+                                                   ],
+                  "low_confidence_review":  [
+                                                "fish_000000009598_05281.png",
+                                                "fish_000000009598_05287.png",
+                                                "fish_000000009598_05351.png",
+                                                "fish_000000009598_05359.png"
+                                            ]
+              },
+    "interpretation":  "These are triage observations from a smoke sample. They are not TP/FP/FN or clinical error rates because joint expert ground truth is absent."
+}

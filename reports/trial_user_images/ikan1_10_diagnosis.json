@@ -1,0 +1,25 @@
+﻿{
+    "generated_at_utc":  "2026-10-09T03:35:03.6251386Z",
+    "input_folder":  "D:\\yolocomvis\\input_uji_coba",
+    "finding":  "The current low-memory fish checkpoint misses 8 of 10 user images even at confidence 0.10; this is not primarily a threshold problem.",
+    "lowmem_counts":  {
+                          "confidence_0_50":  2,
+                          "confidence_0_25":  2,
+                          "confidence_0_10":  2
+                      },
+    "historical_counts":  {
+                              "confidence_0_10":  9
+                          },
+    "interpretation":  [
+                           "Current low-memory checkpoint was trained/evaluated on a different visual domain and at a low-memory 320px training setup.",
+                           "User photos include aquarium/clean-background, close-up, cropped, high-resolution and different species/appearance than the small Fish4Knowledge validation frames.",
+                           "The historical checkpoint detects more user images, but its extra boxes are not ground-truth verified and must not be substituted silently.",
+                           "A lower confidence threshold alone cannot recover most misses from the current checkpoint."
+                       ],
+    "recommended_action":  "Collect 30-100 representative target-domain fish images, annotate boxes, split by source/session, then fine-tune or retrain and evaluate on a locked target-domain test set.",
+    "not_verified":  [
+                         "lesion correctness on user images",
+                         "disease correctness on user images",
+                         "clinical diagnosis"
+                     ]
+}

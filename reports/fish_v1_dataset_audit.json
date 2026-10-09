@@ -1,0 +1,117 @@
+﻿{
+    "dataset":  "Fish.v1-416x416.yolo26",
+    "path":  "D:\\yolocomvis\\input_uji_coba\\Fish.v1-416x416.yolo26",
+    "source":  "Roboflow fish-yzfml v1",
+    "license_claim_in_metadata":  "Public Domain",
+    "format":  "YOLO26",
+    "image_count":  1350,
+    "class_count":  26,
+    "current_model_class_count":  1,
+    "training_compatibility":  "conditional",
+    "audit":  {
+                  "train":  {
+                                "images":  944,
+                                "labels":  944,
+                                "boxes":  2077,
+                                "empty_label_files":  0,
+                                "class_counts":  {
+                                                     "11":  94,
+                                                     "7":  6,
+                                                     "20":  151,
+                                                     "12":  1,
+                                                     "10":  73,
+                                                     "17":  190,
+                                                     "13":  1,
+                                                     "18":  88,
+                                                     "23":  1,
+                                                     "19":  94,
+                                                     "1":  1,
+                                                     "5":  148,
+                                                     "4":  1,
+                                                     "3":  1,
+                                                     "14":  1,
+                                                     "22":  270,
+                                                     "25":  1,
+                                                     "9":  166,
+                                                     "15":  6,
+                                                     "21":  1,
+                                                     "24":  167,
+                                                     "16":  74,
+                                                     "8":  88,
+                                                     "0":  266,
+                                                     "2":  186,
+                                                     "6":  1
+                                                 }
+                            },
+                  "valid":  {
+                                "images":  270,
+                                "labels":  270,
+                                "boxes":  651,
+                                "empty_label_files":  0,
+                                "class_counts":  {
+                                                     "12":  1,
+                                                     "5":  62,
+                                                     "18":  21,
+                                                     "16":  30,
+                                                     "10":  30,
+                                                     "2":  46,
+                                                     "8":  21,
+                                                     "0":  104,
+                                                     "11":  33,
+                                                     "17":  46,
+                                                     "9":  23,
+                                                     "24":  23,
+                                                     "22":  112,
+                                                     "20":  62,
+                                                     "25":  1,
+                                                     "4":  1,
+                                                     "19":  34,
+                                                     "13":  1
+                                                 }
+                            },
+                  "test":  {
+                               "images":  136,
+                               "labels":  136,
+                               "boxes":  414,
+                               "empty_label_files":  0,
+                               "class_counts":  {
+                                                    "5":  12,
+                                                    "18":  8,
+                                                    "16":  12,
+                                                    "10":  12,
+                                                    "2":  31,
+                                                    "8":  8,
+                                                    "0":  100,
+                                                    "11":  27,
+                                                    "17":  31,
+                                                    "9":  17,
+                                                    "24":  17,
+                                                    "22":  100,
+                                                    "20":  12,
+                                                    "19":  27
+                                                }
+                           }
+              },
+    "observations":  [
+                         "Images are underwater reef scenes and visually closer to the current Fish4Knowledge domain than the user studio-like photos.",
+                         "The dataset has 26 species-level class IDs, while the current fish detector expects one generic fish class.",
+                         "The export resized images to 416x416 with Stretch preprocessing, so geometry may be distorted.",
+                         "Several classes are extremely rare; class counts are imbalanced.",
+                         "The dataset has train/valid/test folders and matching image-label counts in the local audit."
+                     ],
+    "recommendation":  "Use as an external trial set immediately. Do not mix into the current training run unchanged. If used for training, map every valid class ID to class 0, validate labels and duplicates, then create a new mixed dataset with Fish4Knowledge and hold out entire source groups for evaluation.",
+    "next_step":  "Run inference on 10-30 representative images first; only retrain after confirming detections and deciding whether generic fish detection or species classification is the goal.",
+    "not_claimed":  [
+                        "No claim that all annotations are correct without visual review",
+                        "No disease or lesion labels are provided",
+                        "No evidence yet that this dataset improves target-domain performance"
+                    ],
+    "current_checkpoint_smoke_test":  {
+                                          "checkpoint":  "runs/detect/Runs_DynamicAttention/model_ikan_lowmem/weights/best.pt",
+                                          "confidence":  0.25,
+                                          "sample_split":  "test",
+                                          "sample_size":  10,
+                                          "predicted_images_with_box":  0,
+                                          "interpretation":  "The current checkpoint produced no box on the first 10 test images sampled. This supports using the dataset for domain adaptation experiments, not treating it as already compatible at inference time."
+                                      }
+}

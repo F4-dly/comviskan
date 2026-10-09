@@ -1,0 +1,6 @@
+path: D:/yolocomvis/datasets/fish_mixed_v1_compact
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: fish

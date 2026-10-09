@@ -24,6 +24,7 @@ class DynamicAttention(nn.Module):
             nn.Sigmoid(),
         )
         self.output = nn.Conv2d(channels, channels, 1, bias=False)
+        nn.init.zeros_(self.output.weight)
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
         channel_weights = self.channel_gate(inputs)

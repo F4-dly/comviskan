@@ -1,0 +1,70 @@
+{
+  "generated_at_utc": "2026-10-09T02:37:36.781928+00:00",
+  "datasets": {
+    "fish4knowledge": {
+      "splits": {
+        "train": {
+          "images": 9666,
+          "labels": 9666,
+          "images_without_labels": 0,
+          "labels_without_images": 0,
+          "invalid_label_lines": 0
+        },
+        "val": {
+          "images": 2436,
+          "labels": 2436,
+          "images_without_labels": 0,
+          "labels_without_images": 0,
+          "invalid_label_lines": 0
+        }
+      },
+      "exact_duplicate_image_hashes_between_train_val": 0,
+      "duplicate_examples": [],
+      "note": "This checks exact image duplicates only; near-duplicate video frames require source metadata or perceptual hashing."
+    },
+    "fishdisease": {
+      "splits": {
+        "train": {
+          "images": 922,
+          "labels": 922,
+          "images_without_labels": 0,
+          "labels_without_images": 0,
+          "invalid_label_lines": 0
+        },
+        "val": {
+          "images": 233,
+          "labels": 233,
+          "images_without_labels": 0,
+          "labels_without_images": 0,
+          "invalid_label_lines": 0
+        }
+      },
+      "exact_duplicate_image_hashes_between_train_val": 0,
+      "duplicate_examples": [],
+      "note": "This checks exact image duplicates only; near-duplicate video frames require source metadata or perceptual hashing."
+    },
+    "freshwater_kaggle": {
+      "classes": {
+        "train": {
+          "Bacterial diseases - Aeromoniasis": 250,
+          "Bacterial gill disease": 250,
+          "Bacterial Red disease": 250,
+          "Fungal diseases Saprolegniasis": 250,
+          "Healthy Fish": 250,
+          "Parasitic diseases": 250,
+          "Viral diseases White tail disease": 250
+        },
+        "val": {
+          "Bacterial diseases - Aeromoniasis": 100,
+          "Bacterial gill disease": 100,
+          "Bacterial Red disease": 100,
+          "Fungal diseases Saprolegniasis": 100,
+          "Healthy Fish": 100,
+          "Parasitic diseases": 100,
+          "Viral diseases White tail disease": 100
+        }
+      },
+      "note": "Folder split audit cannot prove that adjacent frames or the same fish are separated."
+    }
+  }
+}

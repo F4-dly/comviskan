@@ -1,0 +1,24 @@
+{
+  "generated_at_utc": "2026-10-09T02:37:40.800290+00:00",
+  "claim_allowed": false,
+  "claim": "final diagnostic system",
+  "blocking_conditions": [
+    "Independent, source-aware, expert-reviewed test set is not present.",
+    "End-to-end ground truth labels are not present.",
+    "No exact fish train/val image duplicates were found; near-duplicate/source leakage still requires review.",
+    "Lesion validation remains weak after the low-memory retraining attempt; improve annotations/modeling before a health claim."
+  ],
+  "observed": {
+    "fish_exact_duplicate_hashes_train_val": 0,
+    "readiness_report": "D:\\yolocomvis\\reports\\presentation_readiness.json",
+    "classification_validation_only": true,
+    "lesion_retraining_report": "D:\\yolocomvis\\reports\\lesion_retrained_metrics.json",
+    "lesion_retraining_report_exists": true
+  },
+  "required_before_final_claim": [
+    "Create and lock test manifest before model selection.",
+    "Run baseline and DynamicAttention on identical clean splits.",
+    "Report per-class errors and end-to-end metrics on the locked test set.",
+    "Obtain expert review/ground truth for health claims."
+  ]
+}

@@ -1,0 +1,9 @@
+﻿{
+    "generated_at_utc":  "2026-10-09T02:40:36.4503591Z",
+    "stage":  9,
+    "status":  "not_controlled_ablation",
+    "baseline_artifact":  "reports/yolo26_baseline_metrics.json",
+    "attention_artifact":  "reports/evaluation_metrics.json",
+    "warning":  "Baseline is zero-shot pretrained evaluation and was not trained on the identical rebuilt split. The numbers must not be presented as a causal DynamicAttention improvement.",
+    "required_next":  "Train plain YOLO and DynamicAttention on identical clean train/val/test splits with same seed, epochs, resolution, and selection rule."
+}

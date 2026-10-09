@@ -1,0 +1,63 @@
+{
+  "fish_detection": {
+    "path": "D:\\yolocomvis\\datasets\\fish4knowledge",
+    "splits": {
+      "train": {
+        "images": 9682,
+        "labels": 9682,
+        "objects": 9682,
+        "images_without_labels": 0,
+        "labels_without_images": 0
+      },
+      "val": {
+        "images": 2420,
+        "labels": 2420,
+        "objects": 2420,
+        "images_without_labels": 0,
+        "labels_without_images": 0
+      }
+    }
+  },
+  "lesion_detection": {
+    "path": "D:\\yolocomvis\\datasets\\fishdisease",
+    "splits": {
+      "train": {
+        "images": 929,
+        "labels": 929,
+        "objects": 1705,
+        "images_without_labels": 0,
+        "labels_without_images": 0
+      },
+      "val": {
+        "images": 226,
+        "labels": 226,
+        "objects": 441,
+        "images_without_labels": 0,
+        "labels_without_images": 0
+      }
+    }
+  },
+  "disease_classification": {
+    "path": "D:\\yolocomvis\\datasets\\freshwater_kaggle",
+    "classes": {
+      "train": {
+        "Bacterial diseases - Aeromoniasis": 250,
+        "Bacterial gill disease": 250,
+        "Bacterial Red disease": 250,
+        "Fungal diseases Saprolegniasis": 250,
+        "Healthy Fish": 250,
+        "Parasitic diseases": 250,
+        "Viral diseases White tail disease": 250
+      },
+      "val": {
+        "Bacterial diseases - Aeromoniasis": 100,
+        "Bacterial gill disease": 100,
+        "Bacterial Red disease": 100,
+        "Fungal diseases Saprolegniasis": 100,
+        "Healthy Fish": 100,
+        "Parasitic diseases": 100,
+        "Viral diseases White tail disease": 100
+      }
+    }
+  }
+}

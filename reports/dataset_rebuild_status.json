@@ -1,0 +1,30 @@
+{
+  "status": "fish_and_lesion_rebuilt",
+  "backup": "D:\\yolocomvis_backups\\baseline_20261008",
+  "seed": 42,
+  "group_split": true,
+  "fish4knowledge": {
+    "train_images": 9666,
+    "val_images": 2436,
+    "exact_duplicate_hashes_train_val": 0,
+    "invalid_label_lines": 0,
+    "images_without_labels": 0,
+    "labels_without_images": 0,
+    "mask_conversion": "all_external_contours_area_at_least_4_pixels"
+  },
+  "fishdisease": {
+    "train_images": 922,
+    "val_images": 233,
+    "exact_duplicate_hashes_train_val": 0,
+    "invalid_label_lines": 0,
+    "images_without_labels": 0,
+    "labels_without_images": 0,
+    "raw_json_files": 1672,
+    "empty_json_files": 517
+  },
+  "freshwater_kaggle": {
+    "status": "existing_split_preserved",
+    "blocked_rebuild_reason": "datasets/freshwater_asli is not present"
+  },
+  "warning": "This is a clean rebuilt train/val dataset, not an expert-reviewed independent test set."
+}

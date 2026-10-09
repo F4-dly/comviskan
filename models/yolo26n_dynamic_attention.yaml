@@ -1,5 +1,5 @@
 # YOLO26n detection graph with DynamicAttention on the deepest backbone feature.
-nc: 80
+nc: 1
 end2end: True
 reg_max: 1
 scales:

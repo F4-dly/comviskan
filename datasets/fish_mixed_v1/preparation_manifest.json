@@ -1,0 +1,14 @@
+{
+  "source_external": "D:\\yolocomvis\\input_uji_coba\\Fish.v1-416x416.yolo26",
+  "source_fish4knowledge": "D:\\yolocomvis\\datasets\\fish4knowledge",
+  "output": "D:\\yolocomvis\\datasets\\fish_mixed_v1",
+  "class_mapping": "all source classes mapped to class 0 fish",
+  "counts": {
+    "fish4knowledge_train": 9666,
+    "fish_v1_train": 944,
+    "fish4knowledge_val": 2436,
+    "fish_v1_val": 270,
+    "fish_v1_test": 136
+  },
+  "test_policy": "Fish v1 test remains held out and is not included in train or val."
+}

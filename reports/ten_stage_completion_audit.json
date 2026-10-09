@@ -1,0 +1,24 @@
+{
+  "generated_at_utc": "2026-10-09T02:46:00Z",
+  "overall_status": "implementation_complete_validation_incomplete",
+  "presentation_status": "prototype_ready_with_blockers",
+  "stages": [
+    {"number": 1, "status": "complete", "evidence": "reports/baseline_manifest.json"},
+    {"number": 2, "status": "complete", "evidence": "reports/dataset_rebuild_status.json and reports/dataset_audit.json"},
+    {"number": 3, "status": "partial", "evidence": "reports/locked_test_manifest.json", "blocker": "Candidate was selected from existing validation folders."},
+    {"number": 4, "status": "blocked", "blocker": "No independent source-aware, expert-reviewed test labels are present."},
+    {"number": 5, "status": "partial", "evidence": "reports/fish_retrained_metrics.json and reports/evaluation_metrics.json", "blocker": "Lesion recall remains 0.45 and all metrics are validation-only."},
+    {"number": 6, "status": "complete", "evidence": "reports/checkpoint_provenance.json"},
+    {"number": 7, "status": "partial", "evidence": "reports/end_to_end_smoke_test/batch_predictions.csv", "blocker": "Smoke test has no joint ground truth, so it is not an end-to-end accuracy evaluation."},
+    {"number": 8, "status": "partial", "evidence": "reports/error_analysis_smoke.json", "blocker": "TP/FP/FN error rates require expert-reviewed test annotations."},
+    {"number": 9, "status": "blocked", "evidence": "reports/baseline_ablation_status.json", "blocker": "Baseline was zero-shot and not trained on the identical rebuilt split."},
+    {"number": 10, "status": "complete", "evidence": "README.md and reports/final_quality_gate.json"}
+  ],
+  "required_external_inputs": [
+    "Independent source-aware test images and labels",
+    "Expert review of fish, lesion, and disease labels",
+    "Joint image-level ground truth for end-to-end scoring",
+    "Controlled plain-YOLO baseline trained on the same split and configuration"
+  ],
+  "safe_claim": "The repository is a reproducible prototype/experimental decision-support pipeline, not a validated final diagnostic system."
+}

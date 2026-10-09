@@ -1,0 +1,15 @@
+dashboard,fish_count,fish_predictions,image,lesion_count,mean_fish_confidence,status
+D:\yolocomvis\reports\trial_user_images\hasil_dashboard_baseline_dashboard.jpg,1,"[{""class"": ""Healthy Fish"", ""confidence"": 0.947111, ""status"": ""model_result""}]",D:\yolocomvis\hasil_dashboard_baseline.jpg,0,0.543477,ok
+D:\yolocomvis\reports\trial_user_images\hasil_dashboard_dynamic_attention_dashboard.jpg,0,[],D:\yolocomvis\hasil_dashboard_dynamic_attention.jpg,0,,ok
+D:\yolocomvis\reports\trial_user_images\hasil_uji_coba_sekarang_dashboard.jpg,0,[],D:\yolocomvis\hasil_uji_coba_sekarang.jpg,0,,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba_dashboard.jpg,1,"[{""class"": ""Viral diseases White tail disease"", ""confidence"": 0.464626, ""status"": ""review_manual""}]",D:\yolocomvis\ujicoba.png,0,0.875934,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba10_dashboard.jpg,0,[],D:\yolocomvis\ujicoba10.png,0,,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba11_dashboard.jpg,0,[],D:\yolocomvis\ujicoba11.jpg,0,,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba2_dashboard.jpg,1,"[{""class"": ""Viral diseases White tail disease"", ""confidence"": 0.824594, ""status"": ""model_result""}]",D:\yolocomvis\ujicoba2.png,0,0.875333,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba3_dashboard.jpg,1,"[{""class"": ""Viral diseases White tail disease"", ""confidence"": 0.994193, ""status"": ""model_result""}]",D:\yolocomvis\ujicoba3.png,0,0.876816,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba4_dashboard.jpg,1,"[{""class"": ""Viral diseases White tail disease"", ""confidence"": 0.892896, ""status"": ""model_result""}]",D:\yolocomvis\ujicoba4.png,0,0.879079,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba5_dashboard.jpg,1,"[{""class"": ""Bacterial gill disease"", ""confidence"": 0.269072, ""status"": ""review_manual""}]",D:\yolocomvis\ujicoba5.png,1,0.836645,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba6_dashboard.jpg,1,"[{""class"": ""Bacterial diseases - Aeromoniasis"", ""confidence"": 0.673975, ""status"": ""review_manual""}]",D:\yolocomvis\ujicoba6.png,0,0.829487,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba7_dashboard.jpg,1,"[{""class"": ""Bacterial diseases - Aeromoniasis"", ""confidence"": 0.838399, ""status"": ""model_result""}]",D:\yolocomvis\ujicoba7.png,0,0.880813,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba8_dashboard.jpg,1,"[{""class"": ""Bacterial Red disease"", ""confidence"": 0.555813, ""status"": ""review_manual""}]",D:\yolocomvis\ujicoba8.png,0,0.863486,ok
+D:\yolocomvis\reports\trial_user_images\ujicoba9_dashboard.jpg,1,"[{""class"": ""Viral diseases White tail disease"", ""confidence"": 0.998827, ""status"": ""model_result""}]",D:\yolocomvis\ujicoba9.png,0,0.790655,ok

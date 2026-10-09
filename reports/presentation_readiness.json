@@ -1,0 +1,66 @@
+{
+  "generated_at_utc": "2026-10-09T02:37:40.771106+00:00",
+  "status": "prototype_ready_with_blockers",
+  "requirements": [
+    {
+      "id": 1,
+      "name": "fish_detection",
+      "status": "validation_complete_test_blocked",
+      "evidence": "Clean-split retraining completed; validation metrics are in reports/fish_retrained_metrics.json. Independent expert-reviewed test evidence is still missing."
+    },
+    {
+      "id": 2,
+      "name": "lesion_detection",
+      "status": "validation_low_retraining_required",
+      "evidence": "A low-memory retraining run was completed but underperformed the retained checkpoint; reports/lesion_retrained_metrics.json records the result and limitation."
+    },
+    {
+      "id": 3,
+      "name": "independent_test_set",
+      "status": "blocked_data",
+      "evidence": "No locked source-aware test labels are available in the current workspace."
+    },
+    {
+      "id": 4,
+      "name": "leakage_and_annotation_audit",
+      "status": "partial",
+      "evidence": "Read-only hash/label audit is in reports/dataset_audit.json; expert visual annotation review remains."
+    },
+    {
+      "id": 5,
+      "name": "end_to_end_validation",
+      "status": "blocked_labels",
+      "evidence": "The pipeline runs, but no end-to-end ground-truth test set exists."
+    },
+    {
+      "id": 6,
+      "name": "checkpoint_provenance",
+      "status": "complete",
+      "evidence": "Checkpoint paths, runtime, timestamps, thresholds, and seed are recorded in evaluation_metrics.json and reports."
+    },
+    {
+      "id": 7,
+      "name": "safe_score_wording",
+      "status": "complete",
+      "evidence": "Dashboard labels confidence as relative and warns that it is not accuracy or diagnosis."
+    },
+    {
+      "id": 8,
+      "name": "per_class_and_error_analysis",
+      "status": "partial",
+      "evidence": "Classification confusion matrix and aggregate metrics exist; detector per-class/error review still requires a clean test set."
+    },
+    {
+      "id": 9,
+      "name": "baseline_and_ablation",
+      "status": "partial",
+      "evidence": "YOLO baseline metrics exist; a controlled same-split ablation is not valid until splits are rebuilt."
+    },
+    {
+      "id": 10,
+      "name": "reproducibility_and_limitations",
+      "status": "complete",
+      "evidence": "README documents commands, limitations, dataset caveats, and Windows-safe execution."
+    }
+  ]
+}

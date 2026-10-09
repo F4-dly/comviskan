@@ -194,7 +194,7 @@ def classification_dashboards(root: Path, count_per_class: int, output_root: Pat
                 "VALIDASI: KLASIFIKASI",
                 f"Acuan folder: {class_dir.name}",
                 f"Prediksi top-1: {predicted_class}",
-                f"Skor model: {score:.4f} (bukan akurasi)",
+                f"Confidence relatif: {score:.4f} (bukan akurasi)",
                 f"Cocok dengan acuan: {'YA' if correct else 'TIDAK'}",
                 "Acuan = label folder dataset.",
                 "Bukan diagnosis kesehatan ikan.",

@@ -24,6 +24,7 @@ REPORT_DIR = ROOT / "Laporan"
 ASSET_DIR = REPORT_DIR / "Tugas_4_Assets"
 MD_PATH = REPORT_DIR / "Tugas_4_Laporan_Akhir.md"
 DOCX_PATH = REPORT_DIR / "Tugas_4_Laporan_Akhir.docx"
+DOCX_ALT_PATH = REPORT_DIR / "Tugas_4_Laporan_Akhir_revisi.docx"
 
 NAVY = "15324B"
 TEAL = "158C8C"
@@ -45,8 +46,8 @@ def theme() -> None:
 
 
 def architecture_figure() -> None:
-    fig, ax = plt.subplots(figsize=(12, 5.3))
-    ax.set_xlim(0, 12); ax.set_ylim(0, 5.3); ax.axis("off")
+    fig, ax = plt.subplots(figsize=(11, 7.2))
+    ax.set_xlim(0, 12); ax.set_ylim(0, 7.2); ax.axis("off")
     stages = [
         (0.3, 3.45, 1.7, 1.0, "Gambar", "foto / frame", NAVY),
         (2.55, 3.45, 1.8, 1.0, "Deteksi ikan", "YOLO26n + DAM", TEAL),
@@ -57,30 +58,30 @@ def architecture_figure() -> None:
     ]
     for x, y, w, h, title, sub, color in stages:
         ax.add_patch(plt.Rectangle((x, y), w, h, facecolor="white", edgecolor=f"#{color}", linewidth=2, joinstyle="round"))
-        ax.text(x+w/2, y+h*.64, title, ha="center", va="center", weight="bold", color=f"#{color}", fontsize=10)
-        ax.text(x+w/2, y+h*.3, sub, ha="center", va="center", color=f"#{GRAY}", fontsize=8)
+        ax.text(x+w/2, y+h*.64, title, ha="center", va="center", weight="bold", color=f"#{color}", fontsize=14)
+        ax.text(x+w/2, y+h*.3, sub, ha="center", va="center", color=f"#{GRAY}", fontsize=11)
     def arrow(x1, y1, x2, y2):
         ax.annotate("", xy=(x2,y2), xytext=(x1,y1), arrowprops={"arrowstyle":"-|>","lw":1.8,"color":f"#{GRAY}"})
     arrow(2.0,3.95,2.5,3.95); arrow(4.4,3.95,4.85,3.95)
     arrow(6.65,3.95,7.1,4.35); arrow(6.65,3.95,7.1,3.3)
     arrow(8.98,4.35,9.65,4.05); arrow(8.98,3.3,9.65,3.85)
-    ax.text(6.0, 5.12, "Tahap berantai: kegagalan deteksi ikan dapat menghentikan analisis crop", ha="center", fontsize=9, color=f"#{RED}")
+    ax.text(6.0, 5.12, "Tahap berantai: kegagalan deteksi ikan dapat menghentikan analisis crop", ha="center", fontsize=12, color=f"#{RED}")
 
-    ax.add_patch(plt.Rectangle((0.45, 0.45), 11.05, 1.55, facecolor="#F3F7FA", edgecolor="#C8D6E0", linewidth=1.2))
-    ax.text(.7, 1.67, "Graph deteksi proyek", color=f"#{NAVY}", weight="bold", fontsize=10)
-    ax.text(.7, 1.32, "Backbone: Conv → C3k2 → SPPF → C2PSA", color=f"#{GRAY}", fontsize=8.5)
-    ax.text(.7, .88, "DAM pada fitur terdalam; Detect memakai fitur multi-skala.", color=f"#{GRAY}", fontsize=8.5)
-    ax.text(6.4, 1.67, "Graph klasifikasi proyek", color=f"#{NAVY}", weight="bold", fontsize=10)
-    ax.text(6.4, 1.32, "Backbone: Conv → C3k2 → C2PSA → DAM → Classify", color=f"#{GRAY}", fontsize=8.5)
-    ax.text(6.4, .88, "Keluaran kelas crop; bukan lokasi lesi/diagnosis lab.", color=f"#{GRAY}", fontsize=8.5)
-    ax.text(6, .15, "Confidence / skor model tidak sama dengan akurasi atau probabilitas klinis.", ha="center", color=f"#{RED}", fontsize=9, weight="bold")
+    ax.add_patch(plt.Rectangle((0.45, 0.45), 11.05, 1.65, facecolor="#F3F7FA", edgecolor="#C8D6E0", linewidth=1.2))
+    ax.text(.7, 1.72, "Graph deteksi proyek", color=f"#{NAVY}", weight="bold", fontsize=14)
+    ax.text(.7, 1.30, "Backbone: Conv → C3k2 → SPPF → C2PSA", color=f"#{GRAY}", fontsize=11)
+    ax.text(.7, .84, "DAM pada fitur terdalam; Detect memakai fitur multi-skala.", color=f"#{GRAY}", fontsize=11)
+    ax.text(6.4, 1.72, "Graph klasifikasi proyek", color=f"#{NAVY}", weight="bold", fontsize=14)
+    ax.text(6.4, 1.30, "Backbone: Conv → C3k2 → C2PSA → DAM → Classify", color=f"#{GRAY}", fontsize=10.5)
+    ax.text(6.4, .84, "Keluaran kelas crop; bukan lokasi lesi/diagnosis lab.", color=f"#{GRAY}", fontsize=10.5)
+    ax.text(6, .12, "Confidence / skor model tidak sama dengan akurasi atau probabilitas klinis.", ha="center", color=f"#{RED}", fontsize=12, weight="bold")
     fig.tight_layout()
     fig.savefig(ASSET_DIR / "arsitektur_pipeline.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
 
 
 def metric_figure() -> None:
-    fig, axes = plt.subplots(1, 3, figsize=(14, 4.6), gridspec_kw={"width_ratios":[1.15,1.15,.85]})
+    fig, axes = plt.subplots(3, 1, figsize=(8.5, 8.6))
     labels = ["YOLO11n\ntrained", "YOLO26n\nzero-shot", "YOLO26n +\nDAM trained"]
     colors = [f"#{NAVY}", f"#{GOLD}", f"#{TEAL}"]
     metrics = {
@@ -94,56 +95,54 @@ def metric_figure() -> None:
         for i,(lab,color) in enumerate(zip(labels,colors)):
             bars=ax.bar(x+(i-1)*width,vals[i],width,label=lab.replace("\n"," "),color=color)
             for b,v in zip(bars,vals[i]):
-                if v>=.09: ax.text(b.get_x()+b.get_width()/2,v+.025,f"{v:.2f}",ha="center",va="bottom",fontsize=7,rotation=0)
-        ax.set_title(title,weight="bold"); ax.set_xticks(x,names,rotation=18,ha="right")
-        ax.set_ylim(0,1.16); ax.set_ylabel("Validation score"); ax.grid(axis="y",alpha=.8); ax.set_axisbelow(True)
+                if v>=.09: ax.text(b.get_x()+b.get_width()/2,v+.025,f"{v:.2f}",ha="center",va="bottom",fontsize=10)
+        ax.set_title(title,weight="bold",fontsize=15); ax.set_xticks(x,names,fontsize=11)
+        ax.set_ylim(0,1.2); ax.set_ylabel("Validation score",fontsize=11); ax.tick_params(axis="y",labelsize=10); ax.grid(axis="y",alpha=.8); ax.set_axisbelow(True)
     cls=[.9929,.0357,.9943]
     ax=axes[2]
     bars=ax.bar(np.arange(3),cls,color=colors,width=.65)
-    ax.set_ylim(0,1.13); ax.set_xticks(np.arange(3),labels,rotation=15,ha="right")
-    ax.set_title("Klasifikasi · Top-1",weight="bold"); ax.set_ylabel("Top-1 validation"); ax.grid(axis="y",alpha=.8); ax.set_axisbelow(True)
-    for b,v in zip(bars,cls): ax.text(b.get_x()+b.get_width()/2,v+.025,f"{v:.3f}",ha="center",fontsize=8)
-    axes[2].set_xticks(np.arange(3),["YOLO11n-cls\ntrained","YOLO26n-cls\nzero-shot","YOLO26n-cls +\nDAM trained"],rotation=0,ha="center",fontsize=7.5)
+    ax.set_ylim(0,1.18); ax.set_xticks(np.arange(3),["YOLO11n-cls · trained","YOLO26n-cls · zero-shot","YOLO26n-cls + DAM · trained"],fontsize=10)
+    ax.set_title("Klasifikasi · Top-1",weight="bold",fontsize=15); ax.set_ylabel("Top-1 validation",fontsize=11); ax.tick_params(axis="y",labelsize=10); ax.grid(axis="y",alpha=.8); ax.set_axisbelow(True)
+    for b,v in zip(bars,cls): ax.text(b.get_x()+b.get_width()/2,v+.025,f"{v:.3f}",ha="center",fontsize=10)
     handles,leglabels=axes[0].get_legend_handles_labels()
-    fig.legend(handles,leglabels,loc="upper center",bbox_to_anchor=(.5,1.02),ncol=3,frameon=False)
-    fig.suptitle("Perbandingan skor yang tersedia — protokol eksperimen berbeda",y=1.12,fontsize=14,weight="bold",color=f"#{NAVY}")
-    fig.text(.5,.055,"Klasifikasi: overlap validation/train dilaporkan; top-1 tinggi bukan estimasi independen.",ha="center",fontsize=8,color=f"#{RED}")
-    fig.text(.5,.018,"Metrik tidak berasal dari head-to-head terkontrol; jangan simpulkan kausalitas arsitektur/DAM.",ha="center",fontsize=8,color=f"#{RED}")
-    fig.tight_layout(rect=[0,.13,1,.95])
+    fig.legend(handles,leglabels,loc="upper center",bbox_to_anchor=(.5,.99),ncol=1,frameon=False,fontsize=10)
+    fig.suptitle("Perbandingan skor validation\nProtokol eksperimen berbeda",y=1.045,fontsize=17,weight="bold",color=f"#{NAVY}")
+    fig.text(.5,.025,"Klasifikasi memiliki overlap train-validation; perbandingan ini bukan head-to-head terkontrol.",ha="center",fontsize=10,color=f"#{RED}")
+    fig.tight_layout(rect=[0,.055,1,.91],h_pad=2.0)
     fig.savefig(ASSET_DIR/"perbandingan_metrik.png",dpi=200,bbox_inches="tight")
     plt.close(fig)
 
 
 def data_figure() -> None:
-    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.7))
+    fig, axes = plt.subplots(3, 1, figsize=(8.5, 8.2))
     ax=axes[0]
     y=[1,0]
     ax.barh(1,5374,color=f"#{TEAL}",label="gambar berlabel pasangan")
     ax.barh(0,2419,color=f"#{TEAL}")
     ax.barh(0,4309,left=2419,color=f"#{RED}",label="gambar tanpa label pasangan")
-    ax.set_yticks(y,["Train","Validation"]); ax.set_title("Fish4Knowledge",weight="bold")
-    ax.set_xlabel("Jumlah gambar"); ax.legend(fontsize=7,loc="lower right")
-    ax.text(500,1,"5.374 paired",va="center",color="white",weight="bold",fontsize=8)
-    ax.text(500,0,"2.419 paired",va="center",color="white",weight="bold",fontsize=8)
-    ax.text(4550,0,"4.309\nno label",va="center",ha="center",color="white",weight="bold",fontsize=8)
-    ax.text(.5,-.24,"+ 4.316 orphan labels (train); +3 (val)",transform=ax.transAxes,ha="center",fontsize=8,color=f"#{RED}")
+    ax.set_yticks(y,["Train","Validation"],fontsize=11); ax.set_title("Fish4Knowledge",weight="bold",fontsize=15)
+    ax.set_xlabel("Jumlah gambar",fontsize=11); ax.tick_params(axis="x",labelsize=10); ax.legend(fontsize=9,loc="lower right")
+    ax.text(500,1,"5.374 paired",va="center",color="white",weight="bold",fontsize=11)
+    ax.text(500,0,"2.419 paired",va="center",color="white",weight="bold",fontsize=11)
+    ax.text(4550,0,"4.309\nno label",va="center",ha="center",color="white",weight="bold",fontsize=10)
+    ax.text(.5,-.34,"+ 4.316 orphan labels (train); +3 (val)",transform=ax.transAxes,ha="center",fontsize=10,color=f"#{RED}")
 
     ax=axes[1]
     ax.barh([1,0],[929,226],color=f"#{TEAL}",label="image-label pairs")
-    ax.set_yticks([1,0],["Train","Validation"]); ax.set_title("FishDisease · lesion",weight="bold")
-    ax.set_xlabel("Jumlah pasangan gambar-label"); ax.text(480,1,"1.705 boxes",ha="center",va="center",color="white",weight="bold")
-    ax.text(115,0,"441 boxes",ha="center",va="center",color="white",weight="bold")
+    ax.set_yticks([1,0],["Train","Validation"],fontsize=11); ax.set_title("FishDisease · lesion",weight="bold",fontsize=15)
+    ax.set_xlabel("Jumlah pasangan gambar-label",fontsize=11); ax.tick_params(axis="x",labelsize=10); ax.text(480,1,"1.705 boxes",ha="center",va="center",color="white",weight="bold",fontsize=11)
+    ax.text(115,0,"441 boxes",ha="center",va="center",color="white",weight="bold",fontsize=10)
 
     ax=axes[2]
     ax.bar([0,1],[250,100],color=[f"#{NAVY}",f"#{GOLD}"],width=.6)
-    ax.set_xticks([0,1],["Train","Validation"]); ax.set_title("Kaggle classification",weight="bold")
-    ax.set_ylabel("Gambar per kelas (masing-masing 7 kelas)"); ax.set_ylim(0,300)
-    for x,val in enumerate([250,100]): ax.text(x,val+7,str(val),ha="center",weight="bold")
-    ax.text(.5,-.24,"Laporan Tugas 2: seluruh validation overlap dengan train",transform=ax.transAxes,ha="center",fontsize=7.6,color=f"#{RED}")
+    ax.set_xticks([0,1],["Train","Validation"],fontsize=11); ax.set_title("Kaggle classification · 7 kelas seimbang",weight="bold",fontsize=15)
+    ax.set_ylabel("Gambar per kelas",fontsize=11); ax.tick_params(axis="y",labelsize=10); ax.set_ylim(0,300)
+    for x,val in enumerate([250,100]): ax.text(x,val+7,str(val),ha="center",weight="bold",fontsize=11)
+    ax.text(.5,-.24,"Laporan Tugas 2: seluruh validation overlap dengan train",transform=ax.transAxes,ha="center",fontsize=10,color=f"#{RED}")
     for ax in axes:
         ax.grid(axis="x",alpha=.4); ax.set_axisbelow(True)
-    fig.suptitle("Ukuran dataset dan temuan kualitas data",fontsize=14,weight="bold",color=f"#{NAVY}")
-    fig.tight_layout(rect=[0,.10,1,.92])
+    fig.suptitle("Ukuran dataset dan temuan kualitas data",fontsize=17,weight="bold",color=f"#{NAVY}")
+    fig.tight_layout(rect=[0,.06,1,.95],h_pad=2.2)
     fig.savefig(ASSET_DIR/"audit_dataset.png",dpi=200,bbox_inches="tight")
     plt.close(fig)
 
@@ -157,17 +156,17 @@ def training_curve_figure() -> None:
         ("Klasifikasi","runs/classify/Runs_DynamicAttention/model_penyakit/results.csv",[
             ("metrics/accuracy_top1","Top-1"),("metrics/accuracy_top5","Top-5")]),
     ]
-    fig,axes=plt.subplots(1,3,figsize=(13.5,4.1))
+    fig,axes=plt.subplots(3,1,figsize=(8.5,8.2))
     palette=[NAVY,RED,TEAL,GOLD]
     for ax,(title,path,series) in zip(axes,specs):
         frame=pd.read_csv(ROOT/path); frame.columns=[c.strip() for c in frame.columns]
         for i,(col,label) in enumerate(series):
             ax.plot(frame["epoch"],frame[col],marker="o",lw=2,color=f"#{palette[i]}",label=label)
-        ax.set_title(title,weight="bold"); ax.set_xlabel("Epoch"); ax.set_xticks(frame["epoch"])
-        ax.set_ylim(0,1.04); ax.grid(alpha=.7); ax.legend(fontsize=8,frameon=False)
-    fig.suptitle("Validation per epoch · YOLO26 + DynamicAttention",fontsize=14,weight="bold",color=f"#{NAVY}")
-    fig.text(.5,-.015,"Satu run/seed; kurva tidak mengatasi kebocoran split atau ketidakcocokan anotasi.",ha="center",fontsize=8,color=f"#{RED}")
-    fig.tight_layout(rect=[0,.04,1,.91])
+        ax.set_title(title,weight="bold",fontsize=15); ax.set_xlabel("Epoch",fontsize=11); ax.set_xticks(frame["epoch"]); ax.tick_params(labelsize=10)
+        ax.set_ylim(0,1.04); ax.grid(alpha=.7); ax.legend(fontsize=10,frameon=False,ncol=4 if title!="Klasifikasi" else 2)
+    fig.suptitle("Validation per epoch · YOLO26 + DynamicAttention",fontsize=17,weight="bold",color=f"#{NAVY}")
+    fig.text(.5,.025,"Satu run/seed; kurva tidak mengatasi kebocoran split atau ketidakcocokan anotasi.",ha="center",fontsize=10,color=f"#{RED}")
+    fig.tight_layout(rect=[0,.06,1,.94],h_pad=2.0)
     fig.savefig(ASSET_DIR/"kurva_training_dynamic_attention.png",dpi=200,bbox_inches="tight")
     plt.close(fig)
 
@@ -206,7 +205,7 @@ def inline_format(paragraph, text: str) -> None:
             run.font.name="Consolas"; run.font.size=Pt(8); run.font.color.rgb=RGBColor.from_string(TEAL)
 
 
-def render_docx() -> None:
+def render_docx() -> Path:
     doc=Document()
     section=doc.sections[0]
     section.top_margin=Inches(.72); section.bottom_margin=Inches(.68)
@@ -299,14 +298,22 @@ def render_docx() -> None:
     doc.core_properties.title="Tugas 4 — Laporan Akhir YOLOComVis"
     doc.core_properties.subject="Evaluasi perkembangan, arsitektur, dan kelemahan model"
     doc.core_properties.author="Kelompok 15 — Teknik Komputer, Universitas Brawijaya"
-    doc.save(DOCX_PATH)
+    try:
+        doc.save(DOCX_PATH)
+        saved_path = DOCX_PATH
+    except PermissionError:
+        # Word may hold the previous deliverable open. Preserve it and emit the
+        # updated, larger-figure version beside it rather than failing silently.
+        doc.save(DOCX_ALT_PATH)
+        saved_path = DOCX_ALT_PATH
+    return saved_path
 
 
 def main() -> None:
     ASSET_DIR.mkdir(parents=True,exist_ok=True)
-    theme(); architecture_figure(); metric_figure(); data_figure(); training_curve_figure(); render_docx()
+    theme(); architecture_figure(); metric_figure(); data_figure(); training_curve_figure(); saved_docx=render_docx()
     print(f"Markdown: {MD_PATH}")
-    print(f"DOCX: {DOCX_PATH}")
+    print(f"DOCX: {saved_docx}")
     print(f"Figures: {ASSET_DIR}")
 
 

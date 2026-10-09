@@ -1,0 +1,36 @@
+{
+  "generated_at_utc": "2026-10-09T02:37:40.789712+00:00",
+  "thresholds": {
+    "fish_detection_confidence": 0.5,
+    "lesion_detection_confidence": 0.25,
+    "classification_review_threshold": 0.8
+  },
+  "seed": 42,
+  "entries": [
+    {
+      "task": "fish_detection",
+      "checkpoint": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_ikan_lowmem\\weights\\best.pt",
+      "exists": true,
+      "sha256": "459761b88315965662481e4e0776ba769198c0d4d60184ebf9598f81b1b96e5d",
+      "checkpoint_modified_utc": "2026-10-08T19:10:30.199896+00:00",
+      "completed_epochs_from_results_csv": 10
+    },
+    {
+      "task": "lesion_detection",
+      "checkpoint": "D:\\yolocomvis\\runs\\detect\\Runs_DynamicAttention\\model_lesi\\weights\\best.pt",
+      "exists": true,
+      "sha256": "802c77d6958947279e5e9803cf67c79b954d7f290479bfca9998131c8639332b",
+      "checkpoint_modified_utc": "2026-09-27T15:48:00.656053+00:00",
+      "completed_epochs_from_results_csv": 10
+    },
+    {
+      "task": "disease_classification",
+      "checkpoint": "D:\\yolocomvis\\runs\\classify\\Runs_DynamicAttention\\model_penyakit\\weights\\best.pt",
+      "exists": true,
+      "sha256": "00fa5b31d09d5cfbeeb407c9a770a3df9fa97b02af0d9a0bfa3326d02cdcdb6c",
+      "checkpoint_modified_utc": "2026-09-27T15:49:53.406009+00:00",
+      "completed_epochs_from_results_csv": 10
+    }
+  ],
+  "warning": "These checkpoints are historical validation artifacts, not independent-test evidence."
+}

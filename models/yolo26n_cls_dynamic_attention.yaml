@@ -1,5 +1,5 @@
 # YOLO26n classification graph with DynamicAttention on the deepest feature.
-nc: 1000
+nc: 7
 scales:
   n: [0.50, 0.25, 1024]
 
